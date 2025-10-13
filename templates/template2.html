@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Operations Nerve Center</title>
+    <style>
+        :root {
+            font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            --bg: #0b1220;
+            --panel: #111c34;
+            --surface: #14203b;
+            --surface-soft: rgba(96, 165, 250, 0.08);
+            --accent: #60a5fa;
+            --accent-strong: #38bdf8;
+            --text: #f8fafc;
+            --muted: #94a3b8;
+            --border: rgba(148, 163, 184, 0.16);
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: radial-gradient(circle at top left, rgba(96, 165, 250, 0.25), transparent 42%), var(--bg);
+            color: var(--text);
+            display: grid;
+            grid-template-columns: 1.8fr 1.1fr;
+            gap: 28px;
+            padding: 32px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 22px;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            letter-spacing: 0.04em;
+        }
+
+        .summary {
+            display: flex;
+            gap: 16px;
+        }
+
+        .summary-card {
+            background: var(--surface);
+            border-radius: 18px;
+            padding: 16px 20px;
+            min-width: 170px;
+            display: grid;
+            gap: 6px;
+        }
+
+        .summary-card strong {
+            font-size: 1.4rem;
+        }
+
+        main {
+            background: var(--panel);
+            border-radius: 26px;
+            padding: 32px;
+            display: grid;
+            grid-template-rows: auto 1fr;
+            gap: 32px;
+        }
+
+        .project-table-wrapper {
+            display: grid;
+            gap: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.12em;
+            color: var(--muted);
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .priority {
+            font-weight: 600;
+        }
+
+        .priority.high {
+            color: #f87171;
+        }
+
+        .priority.medium {
+            color: #fbbf24;
+        }
+
+        .priority.low {
+            color: #34d399;
+        }
+
+        .status {
+            padding: 4px 12px;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            background: rgba(96, 165, 250, 0.1);
+            color: var(--accent);
+        }
+
+        .status.warning {
+            background: rgba(251, 191, 36, 0.12);
+            color: #fbbf24;
+        }
+
+        .status.danger {
+            background: rgba(248, 113, 113, 0.12);
+            color: #f87171;
+        }
+
+        .dashboard {
+            background: var(--panel);
+            border-radius: 26px;
+            padding: 32px;
+            display: grid;
+            grid-template-rows: auto auto 1fr;
+            gap: 22px;
+        }
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .kpi-card {
+            background: var(--surface);
+            border-radius: 18px;
+            padding: 18px;
+            display: grid;
+            gap: 6px;
+        }
+
+        .trend {
+            color: var(--accent-strong);
+            font-size: 0.8rem;
+        }
+
+        .chart-panel {
+            background: linear-gradient(135deg, rgba(96, 165, 250, 0.16), rgba(14, 165, 233, 0.08));
+            border-radius: 20px;
+            min-height: 170px;
+            display: grid;
+            place-items: center;
+            color: var(--muted);
+        }
+
+        .chat-panel {
+            background: var(--surface);
+            border-radius: 20px;
+            padding: 20px;
+            display: grid;
+            gap: 14px;
+        }
+
+        .chat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        .prompts {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .prompt {
+            background: var(--surface-soft);
+            color: var(--accent);
+            padding: 8px 12px;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: border 0.2s ease;
+        }
+
+        .prompt:hover {
+            border-color: var(--accent);
+        }
+
+        .chat-input {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 14px;
+            padding: 12px 14px;
+        }
+
+        .chat-input input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            color: var(--text);
+            font-size: 0.95rem;
+            outline: none;
+        }
+
+        .icon-button,
+        .send {
+            border: none;
+            background: rgba(148, 163, 184, 0.12);
+            color: var(--text);
+            width: 36px;
+            height: 36px;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .send {
+            width: auto;
+            padding: 10px 16px;
+            border-radius: 999px;
+            background: var(--accent);
+            color: #0b1220;
+            font-weight: 600;
+        }
+
+        .icon-button:hover,
+        .send:hover {
+            background: rgba(96, 165, 250, 0.22);
+        }
+
+        footer {
+            font-size: 0.8rem;
+            color: var(--muted);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        @media (max-width: 1200px) {
+            body {
+                grid-template-columns: 1fr;
+                padding: 24px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .summary {
+                flex-wrap: wrap;
+            }
+
+            table {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <header>
+            <div>
+                <h1>Operations Nerve Center</h1>
+                <p style="color: var(--muted);">Prioritized glazing and door initiatives across all crews</p>
+            </div>
+            <div class="summary">
+                <div class="summary-card">
+                    <span>Backlog</span>
+                    <strong>18 jobs</strong>
+                </div>
+                <div class="summary-card">
+                    <span>At risk</span>
+                    <strong>3 projects</strong>
+                </div>
+                <div class="summary-card">
+                    <span>Forecast margin</span>
+                    <strong>21.4%</strong>
+                </div>
+            </div>
+        </header>
+
+        <div class="project-table-wrapper">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+                <h2 style="font-size:1.2rem;">Priority Projects</h2>
+                <span style="color:var(--muted);font-size:0.85rem;">AI ordered by margin, deadline, crew availability</span>
+            </div>
+            <table aria-label="Priority projects table">
+                <thead>
+                    <tr>
+                        <th>Project</th>
+                        <th>Client</th>
+                        <th>Phase</th>
+                        <th>Budget</th>
+                        <th>Priority</th>
+                        <th>Status</th>
+                        <th>Next milestone</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Skyline Tower Retrofit</td>
+                        <td>UrbanCore</td>
+                        <td>Installation</td>
+                        <td>$420K</td>
+                        <td class="priority high">High</td>
+                        <td><span class="status danger">Crew short</span></td>
+                        <td>Glass delivery · Aug 18</td>
+                    </tr>
+                    <tr>
+                        <td>Riverside Luxury Homes</td>
+                        <td>Atlantic Estates</td>
+                        <td>Procurement</td>
+                        <td>$310K</td>
+                        <td class="priority high">High</td>
+                        <td><span class="status warning">Awaiting sign-off</span></td>
+                        <td>Framing ready · Aug 14</td>
+                    </tr>
+                    <tr>
+                        <td>Harborview Condos</td>
+                        <td>Tidewater Group</td>
+                        <td>Fabrication</td>
+                        <td>$265K</td>
+                        <td class="priority medium">Medium</td>
+                        <td><span class="status">On track</span></td>
+                        <td>QC complete · Aug 24</td>
+                    </tr>
+                    <tr>
+                        <td>Metro Transit Station</td>
+                        <td>CityWorks</td>
+                        <td>Bidding</td>
+                        <td>$190K</td>
+                        <td class="priority medium">Medium</td>
+                        <td><span class="status">Bid prep</span></td>
+                        <td>Submission · Aug 28</td>
+                    </tr>
+                    <tr>
+                        <td>Elmwood School Retrofit</td>
+                        <td>Public Schools</td>
+                        <td>Warranty</td>
+                        <td>$80K</td>
+                        <td class="priority low">Low</td>
+                        <td><span class="status">Warranty visit</span></td>
+                        <td>Punchlist · Sep 2</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <aside class="dashboard" aria-label="Performance dashboard">
+        <section>
+            <h2 style="margin:0;font-size:1.3rem;">Performance Pulse</h2>
+            <p style="color:var(--muted);font-size:0.85rem;">Financials and crew health updated hourly</p>
+        </section>
+        <div class="kpi-grid" role="list">
+            <article class="kpi-card" role="listitem">
+                <span style="color:var(--muted);">Revenue (QTD)</span>
+                <strong>$1.24M</strong>
+                <span class="trend">▲ 12% vs last quarter</span>
+            </article>
+            <article class="kpi-card" role="listitem">
+                <span style="color:var(--muted);">Gross Margin</span>
+                <strong>21.4%</strong>
+                <span class="trend">▲ 1.8 pts vs plan</span>
+            </article>
+            <article class="kpi-card" role="listitem">
+                <span style="color:var(--muted);">Cash Flow</span>
+                <strong>$312K</strong>
+                <span class="trend">▲ Collections on track</span>
+            </article>
+            <article class="kpi-card" role="listitem">
+                <span style="color:var(--muted);">Crew Utilization</span>
+                <strong>87%</strong>
+                <span class="trend">▼ Add subcontractor capacity</span>
+            </article>
+        </div>
+        <div class="chart-panel" role="img" aria-label="Bar chart placeholder comparing budget to actual costs">
+            Cost vs Actuals (placeholder)
+        </div>
+        <div class="chat-panel">
+            <div class="chat-header">
+                <strong>Assistant Dialogue</strong>
+                <span>Voice + files supported</span>
+            </div>
+            <div class="prompts" role="list">
+                <button class="prompt" role="listitem">Forecast cash position</button>
+                <button class="prompt" role="listitem">Prepare install briefing</button>
+                <button class="prompt" role="listitem">Identify margin erosion</button>
+                <button class="prompt" role="listitem">Draft change order email</button>
+            </div>
+            <div class="chat-input">
+                <button class="icon-button" type="button" aria-label="Attach files">📎</button>
+                <button class="icon-button" type="button" aria-label="Start voice capture">🎤</button>
+                <input type="text" placeholder="Ask the assistant about forecasts or crew planning..." aria-label="Message the assistant" />
+                <button class="send" type="button">Send</button>
+            </div>
+        </div>
+        <footer>
+            <span>Last sync · 2 min ago</span>
+            <span>ERP · Field Tracker · CRM</span>
+        </footer>
+    </aside>
+</body>
+</html>

@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Glazier Command Center</title>
+    <style>
+        :root {
+            color-scheme: light;
+            font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            --bg: #f5f7fb;
+            --surface: #ffffff;
+            --surface-muted: #eef2fb;
+            --accent: #1d4ed8;
+            --accent-soft: rgba(29, 78, 216, 0.12);
+            --text: #0f172a;
+            --muted: #64748b;
+            --border: rgba(15, 23, 42, 0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            display: grid;
+            grid-template-columns: 260px 1fr 340px;
+            min-height: 100vh;
+            gap: 24px;
+            padding: 24px;
+        }
+
+        aside,
+        main,
+        section {
+            background: var(--surface);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 24px 48px rgba(15, 23, 42, 0.08);
+        }
+
+        aside {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        .brand {
+            font-weight: 700;
+            font-size: 1.4rem;
+            letter-spacing: 0.04em;
+        }
+
+        nav ul {
+            list-style: none;
+            display: grid;
+            gap: 10px;
+        }
+
+        nav li {
+            padding: 12px 16px;
+            border-radius: 12px;
+            color: var(--muted);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: background 0.2s ease, color 0.2s ease;
+        }
+
+        nav li.active,
+        nav li:hover {
+            background: var(--accent-soft);
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .badge {
+            margin-left: auto;
+            background: var(--surface-muted);
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        main {
+            display: grid;
+            grid-template-rows: auto 1fr;
+            gap: 24px;
+        }
+
+        .projects-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .projects-header h1 {
+            font-size: 1.6rem;
+        }
+
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 18px;
+        }
+
+        .project-card {
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 18px;
+            display: grid;
+            gap: 12px;
+            position: relative;
+            background: linear-gradient(180deg, var(--surface), rgba(255, 255, 255, 0.7));
+        }
+
+        .project-card::after {
+            content: attr(data-priority);
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            font-size: 0.72rem;
+            background: var(--accent-soft);
+            color: var(--accent);
+            padding: 4px 10px;
+            border-radius: 999px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .project-title {
+            font-weight: 600;
+        }
+
+        .project-meta {
+            display: grid;
+            gap: 6px;
+            color: var(--muted);
+            font-size: 0.85rem;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: var(--surface-muted);
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background: var(--accent);
+        }
+
+        section.dashboard {
+            display: grid;
+            grid-template-rows: auto auto 1fr;
+            gap: 18px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+        }
+
+        .stat-card {
+            padding: 18px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, rgba(29, 78, 216, 0.08), rgba(29, 78, 216, 0.16));
+            display: grid;
+            gap: 6px;
+        }
+
+        .stat-card h2 {
+            font-size: 1.8rem;
+        }
+
+        .chart-placeholder {
+            border-radius: 16px;
+            min-height: 160px;
+            display: grid;
+            place-items: center;
+            color: var(--muted);
+            background: repeating-linear-gradient(
+                135deg,
+                rgba(29, 78, 216, 0.08),
+                rgba(29, 78, 216, 0.08) 12px,
+                rgba(29, 78, 216, 0.02) 12px,
+                rgba(29, 78, 216, 0.02) 24px
+            );
+        }
+
+        .chat {
+            border-top: 1px solid var(--border);
+            padding-top: 16px;
+            display: grid;
+            gap: 12px;
+        }
+
+        .chat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+            color: var(--muted);
+        }
+
+        .prompts {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .prompt {
+            background: var(--surface-muted);
+            color: var(--muted);
+            padding: 8px 12px;
+            border-radius: 999px;
+            font-size: 0.82rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .prompt:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        .chat-input {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--surface-muted);
+            border-radius: 999px;
+            padding: 10px 14px;
+        }
+
+        .chat-input input {
+            border: none;
+            background: transparent;
+            flex: 1;
+            font-size: 0.95rem;
+            outline: none;
+        }
+
+        .chat-input button,
+        .icon-button {
+            border: none;
+            background: transparent;
+            display: grid;
+            place-items: center;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            color: var(--muted);
+            cursor: pointer;
+            transition: background 0.2s ease, color 0.2s ease;
+        }
+
+        .chat-input button.send {
+            background: var(--accent);
+            color: #fff;
+            border-radius: 999px;
+            padding: 10px 16px;
+            width: auto;
+        }
+
+        .icon-button:hover,
+        .chat-input button:hover {
+            background: var(--accent-soft);
+            color: var(--accent);
+        }
+
+        .mini-timeline {
+            display: grid;
+            gap: 12px;
+            font-size: 0.85rem;
+            color: var(--muted);
+        }
+
+        .timeline-row {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        @media (max-width: 1200px) {
+            body {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto auto;
+                padding: 16px;
+            }
+
+            main,
+            section,
+            aside {
+                order: initial;
+            }
+
+            section.dashboard {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .project-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <aside>
+        <div class="brand">Glazier AI Console</div>
+        <nav aria-label="Primary">
+            <ul>
+                <li class="active">
+                    <span>Active Projects</span>
+                    <span class="badge">6</span>
+                </li>
+                <li><span>Pipeline</span></li>
+                <li><span>Field Crews</span></li>
+                <li><span>Financials</span></li>
+                <li><span>Client Updates</span></li>
+            </ul>
+        </nav>
+        <div class="mini-timeline" aria-label="Upcoming Milestones">
+            <strong>Upcoming Milestones</strong>
+            <div class="timeline-row"><span>Skyline Tower</span><span>Glass delivery • Aug 18</span></div>
+            <div class="timeline-row"><span>Riverside Homes</span><span>Install kickoff • Aug 21</span></div>
+            <div class="timeline-row"><span>Metro Station</span><span>Bid due • Aug 28</span></div>
+        </div>
+    </aside>
+
+    <main>
+        <div class="projects-header">
+            <div>
+                <h1>Priority Queue</h1>
+                <p class="project-meta">Ranked by risk, margin, schedule pressure, and crew load</p>
+            </div>
+            <button class="icon-button" aria-label="Refresh priorities">
+                <span aria-hidden="true">⟳</span>
+            </button>
+        </div>
+        <div class="project-grid">
+            <article class="project-card" data-priority="High">
+                <h2 class="project-title">Skyline Tower Retrofit</h2>
+                <div class="project-meta">
+                    <span>Status · Installation prep</span>
+                    <span>Budget · $420K • Margin · 18%</span>
+                    <span>Critical path · Curtain wall delivery (Aug 18)</span>
+                </div>
+                <div class="progress-bar" aria-hidden="true"><div class="progress" style="width: 62%"></div></div>
+            </article>
+            <article class="project-card" data-priority="High">
+                <h2 class="project-title">Riverside Luxury Homes</h2>
+                <div class="project-meta">
+                    <span>Status · Procurement</span>
+                    <span>Budget · $310K • Margin · 22%</span>
+                    <span>Critical path · Glass package approval (Aug 11)</span>
+                </div>
+                <div class="progress-bar" aria-hidden="true"><div class="progress" style="width: 38%"></div></div>
+            </article>
+            <article class="project-card" data-priority="Medium">
+                <h2 class="project-title">Metro Transit Station</h2>
+                <div class="project-meta">
+                    <span>Status · Bidding</span>
+                    <span>Budget · $190K • Margin · 15%</span>
+                    <span>Critical path · Bid submission (Aug 28)</span>
+                </div>
+                <div class="progress-bar" aria-hidden="true"><div class="progress" style="width: 14%"></div></div>
+            </article>
+            <article class="project-card" data-priority="Medium">
+                <h2 class="project-title">Harborview Condos</h2>
+                <div class="project-meta">
+                    <span>Status · Fabrication</span>
+                    <span>Budget · $265K • Margin · 17%</span>
+                    <span>Critical path · Curtain wall QA (Aug 24)</span>
+                </div>
+                <div class="progress-bar" aria-hidden="true"><div class="progress" style="width: 44%"></div></div>
+            </article>
+            <article class="project-card" data-priority="Low">
+                <h2 class="project-title">Elmwood School Retrofit</h2>
+                <div class="project-meta">
+                    <span>Status · Warranty</span>
+                    <span>Budget · $80K • Margin · 11%</span>
+                    <span>Critical path · Punchlist walkthrough (Sep 2)</span>
+                </div>
+                <div class="progress-bar" aria-hidden="true"><div class="progress" style="width: 92%"></div></div>
+            </article>
+        </div>
+    </main>
+
+    <section class="dashboard" aria-label="Performance dashboard">
+        <header>
+            <h2>Financial &amp; Delivery Health</h2>
+            <p class="project-meta">Live KPIs sourced from ERP, estimating, and field tracking</p>
+        </header>
+        <div class="stats" role="list">
+            <article class="stat-card" role="listitem">
+                <h2>$1.24M</h2>
+                <p>Quarter-to-date revenue</p>
+            </article>
+            <article class="stat-card" role="listitem">
+                <h2>+6.2%</h2>
+                <p>Gross margin uplift vs target</p>
+            </article>
+            <article class="stat-card" role="listitem">
+                <h2>92%</h2>
+                <p>Schedule adherence</p>
+            </article>
+            <article class="stat-card" role="listitem">
+                <h2>$48K</h2>
+                <p>Projected variance to plan</p>
+            </article>
+        </div>
+        <div class="chart-placeholder" role="img" aria-label="Line chart placeholder showing month over month revenue growth">
+            Revenue trend (placeholder)
+        </div>
+        <div class="chat">
+            <div class="chat-header">
+                <strong>Assistant Console</strong>
+                <span>Listening for: cash flow, crew, risk</span>
+            </div>
+            <div class="prompts" role="list">
+                <button class="prompt" role="listitem">Summarize this week&apos;s risks</button>
+                <button class="prompt" role="listitem">Draft client update for Skyline Tower</button>
+                <button class="prompt" role="listitem">Compare margins by crew</button>
+                <button class="prompt" role="listitem">Highlight projects slipping schedule</button>
+            </div>
+            <div class="chat-input">
+                <button class="icon-button" type="button" aria-label="Attach files">
+                    📎
+                </button>
+                <button class="icon-button" type="button" aria-label="Start voice capture">
+                    🎤
+                </button>
+                <input type="text" placeholder="Ask about installation readiness or cash flow..." aria-label="Message the assistant" />
+                <button class="send" type="button">Send</button>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

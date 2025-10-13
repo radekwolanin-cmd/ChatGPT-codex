@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Executive Overview</title>
+    <style>
+        :root {
+            font-family: "Poppins", "Segoe UI", system-ui, sans-serif;
+            --bg: #101828;
+            --surface: #111827;
+            --surface-alt: #1f2937;
+            --border: rgba(148, 163, 184, 0.18);
+            --accent: #f97316;
+            --accent-soft: rgba(249, 115, 22, 0.16);
+            --text: #f9fafb;
+            --muted: #cbd5f5;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: radial-gradient(circle at 15% 20%, rgba(249, 115, 22, 0.32), transparent 40%), var(--bg);
+            color: var(--text);
+            display: grid;
+            grid-template-columns: 2.1fr 1fr;
+            gap: 28px;
+            padding: 36px;
+        }
+
+        main {
+            background: rgba(17, 24, 39, 0.88);
+            border-radius: 28px;
+            padding: 32px;
+            display: grid;
+            grid-template-rows: auto auto 1fr;
+            gap: 24px;
+            border: 1px solid var(--border);
+        }
+
+        aside {
+            background: rgba(17, 24, 39, 0.88);
+            border-radius: 28px;
+            padding: 28px;
+            display: grid;
+            gap: 24px;
+            border: 1px solid var(--border);
+        }
+
+        h1 {
+            font-size: 1.9rem;
+            margin: 0;
+        }
+
+        .intro {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .intro span {
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        .priority-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 18px;
+        }
+
+        .priority-card {
+            background: var(--surface-alt);
+            border-radius: 20px;
+            padding: 20px;
+            border: 1px solid var(--border);
+            display: grid;
+            gap: 12px;
+        }
+
+        .priority-card header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .priority-tag {
+            background: var(--accent-soft);
+            color: var(--accent);
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .meta {
+            display: grid;
+            gap: 6px;
+            font-size: 0.85rem;
+            color: var(--muted);
+        }
+
+        .timeline {
+            display: grid;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .timeline-item {
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            gap: 12px;
+            align-items: center;
+            color: var(--muted);
+            font-size: 0.85rem;
+        }
+
+        .timeline-item strong {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .scorecards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+        .scorecard {
+            background: var(--surface-alt);
+            border-radius: 18px;
+            padding: 18px;
+            display: grid;
+            gap: 6px;
+            border: 1px solid var(--border);
+        }
+
+        .scorecard strong {
+            font-size: 1.6rem;
+        }
+
+        .charts {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 18px;
+        }
+
+        .chart-box {
+            background: var(--surface-alt);
+            border-radius: 20px;
+            padding: 18px;
+            border: 1px solid var(--border);
+            display: grid;
+            gap: 12px;
+        }
+
+        .chart-placeholder {
+            min-height: 150px;
+            border-radius: 16px;
+            background: repeating-linear-gradient(135deg, rgba(249, 115, 22, 0.18), rgba(249, 115, 22, 0.18) 12px, rgba(249, 115, 22, 0.05) 12px, rgba(249, 115, 22, 0.05) 24px);
+            display: grid;
+            place-items: center;
+            color: var(--muted);
+        }
+
+        .chat-panel {
+            background: var(--surface-alt);
+            border-radius: 20px;
+            padding: 20px;
+            display: grid;
+            gap: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .chat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+            color: var(--muted);
+        }
+
+        .prompt-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .prompt {
+            background: transparent;
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            padding: 8px 12px;
+            color: var(--muted);
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: border 0.2s ease, color 0.2s ease;
+        }
+
+        .prompt:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .chat-input {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 14px;
+            padding: 12px 16px;
+            border: 1px solid var(--border);
+        }
+
+        .chat-input input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            color: var(--text);
+            font-size: 0.95rem;
+            outline: none;
+        }
+
+        .icon-button,
+        .send {
+            border: none;
+            background: transparent;
+            width: 36px;
+            height: 36px;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            color: var(--muted);
+            cursor: pointer;
+        }
+
+        .send {
+            width: auto;
+            padding: 10px 16px;
+            border-radius: 999px;
+            background: var(--accent);
+            color: #101828;
+            font-weight: 600;
+        }
+
+        .icon-button:hover {
+            background: rgba(249, 115, 22, 0.18);
+            color: var(--accent);
+        }
+
+        footer {
+            color: var(--muted);
+            font-size: 0.82rem;
+        }
+
+        @media (max-width: 1280px) {
+            body {
+                grid-template-columns: 1fr;
+                padding: 24px;
+            }
+
+            .charts {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .priority-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .scorecards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <div class="intro">
+            <div>
+                <h1>Executive Overview</h1>
+                <p style="color:var(--muted);">Windows &amp; doors portfolio monitored by AI copilot</p>
+            </div>
+            <span>Updated 2 minutes ago</span>
+        </div>
+
+        <section>
+            <header class="dashboard-header">
+                <h2 style="margin:0;">Priority Focus</h2>
+                <span style="color:var(--muted);">Sorted by risk, profit, timeline pressure</span>
+            </header>
+            <div class="priority-grid">
+                <article class="priority-card">
+                    <header>
+                        <h3 style="margin:0;">Skyline Tower Retrofit</h3>
+                        <span class="priority-tag">High</span>
+                    </header>
+                    <div class="meta">
+                        <span>Status · Installation</span>
+                        <span>Budget · $420K • Margin · 18%</span>
+                        <span>Risk flag · Crew shortage</span>
+                    </div>
+                    <div class="timeline">
+                        <div class="timeline-item"><strong>Aug 18</strong><span>Curtain wall delivery confirmed</span></div>
+                        <div class="timeline-item"><strong>Aug 22</strong><span>Install kickoff with Crew Bravo</span></div>
+                    </div>
+                </article>
+                <article class="priority-card">
+                    <header>
+                        <h3 style="margin:0;">Riverside Luxury Homes</h3>
+                        <span class="priority-tag">High</span>
+                    </header>
+                    <div class="meta">
+                        <span>Status · Procurement</span>
+                        <span>Budget · $310K • Margin · 22%</span>
+                        <span>Risk flag · Waiting client approval</span>
+                    </div>
+                    <div class="timeline">
+                        <div class="timeline-item"><strong>Aug 11</strong><span>Glass package approval needed</span></div>
+                        <div class="timeline-item"><strong>Aug 19</strong><span>Site readiness inspection</span></div>
+                    </div>
+                </article>
+                <article class="priority-card">
+                    <header>
+                        <h3 style="margin:0;">Harborview Condos</h3>
+                        <span class="priority-tag">Medium</span>
+                    </header>
+                    <div class="meta">
+                        <span>Status · Fabrication</span>
+                        <span>Budget · $265K • Margin · 17%</span>
+                        <span>Risk flag · Aluminum lead time</span>
+                    </div>
+                    <div class="timeline">
+                        <div class="timeline-item"><strong>Aug 15</strong><span>Frame welding checkpoint</span></div>
+                        <div class="timeline-item"><strong>Aug 24</strong><span>QC review with engineering</span></div>
+                    </div>
+                </article>
+                <article class="priority-card">
+                    <header>
+                        <h3 style="margin:0;">Metro Transit Station</h3>
+                        <span class="priority-tag">Medium</span>
+                    </header>
+                    <div class="meta">
+                        <span>Status · Bidding</span>
+                        <span>Budget · $190K • Margin · 15%</span>
+                        <span>Risk flag · Competitor pricing</span>
+                    </div>
+                    <div class="timeline">
+                        <div class="timeline-item"><strong>Aug 18</strong><span>Finalize takeoff package</span></div>
+                        <div class="timeline-item"><strong>Aug 28</strong><span>Bid submission to CityWorks</span></div>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section>
+            <div class="dashboard-header">
+                <h2 style="margin:0;">Financial &amp; Delivery Signals</h2>
+                <span style="color:var(--muted);">Powered by ERP, CRM, field dailies</span>
+            </div>
+            <div class="scorecards">
+                <article class="scorecard">
+                    <span style="color:var(--muted);">Revenue (QTD)</span>
+                    <strong>$1.24M</strong>
+                    <span style="color:var(--accent);">▲ 12% vs last year</span>
+                </article>
+                <article class="scorecard">
+                    <span style="color:var(--muted);">Gross Margin</span>
+                    <strong>21.4%</strong>
+                    <span style="color:var(--accent);">▲ +1.8 pts vs plan</span>
+                </article>
+                <article class="scorecard">
+                    <span style="color:var(--muted);">Cash Position</span>
+                    <strong>$312K</strong>
+                    <span style="color:#facc15;">● neutral · 32 days runway</span>
+                </article>
+            </div>
+            <div class="charts">
+                <div class="chart-box" role="region" aria-label="Financial trend">
+                    <strong>Margin trajectory</strong>
+                    <span style="color:var(--muted);">Trailing 6 months · includes change orders</span>
+                    <div class="chart-placeholder" role="img" aria-label="Line chart placeholder"></div>
+                </div>
+                <div class="chart-box" role="region" aria-label="Operational load">
+                    <strong>Crew utilization</strong>
+                    <span style="color:var(--muted);">Install teams vs capacity</span>
+                    <div class="chart-placeholder" role="img" aria-label="Bar chart placeholder"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <aside>
+        <section>
+            <h2 style="margin:0;">Pipeline Outlook</h2>
+            <p style="color:var(--muted); font-size:0.85rem;">AI scoring upcoming deals by win chance &amp; profitability</p>
+            <div class="priority-card" style="background:transparent; border-color:var(--border);">
+                <header>
+                    <h3 style="margin:0;">Lakeside Medical Center</h3>
+                    <span class="priority-tag">High</span>
+                </header>
+                <div class="meta">
+                    <span>Stage · Proposal</span>
+                    <span>Est. value · $240K • Margin · 19%</span>
+                    <span>Win chance · 62%</span>
+                </div>
+            </div>
+            <div class="priority-card" style="background:transparent; border-color:var(--border);">
+                <header>
+                    <h3 style="margin:0;">Greenline Office Park</h3>
+                    <span class="priority-tag" style="background:rgba(99,102,241,0.18);color:#818cf8;">Medium</span>
+                </header>
+                <div class="meta">
+                    <span>Stage · Design assist</span>
+                    <span>Est. value · $120K • Margin · 16%</span>
+                    <span>Win chance · 48%</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="chat-panel">
+            <div class="chat-header">
+                <strong>Assistant Briefing</strong>
+                <span>Voice &amp; attachments ready</span>
+            </div>
+            <div class="prompt-row" role="list">
+                <button class="prompt" role="listitem">Summarize week for executives</button>
+                <button class="prompt" role="listitem">Flag cash risks next 30 days</button>
+                <button class="prompt" role="listitem">Generate client update for Skyline</button>
+                <button class="prompt" role="listitem">Prepare crew deployment plan</button>
+            </div>
+            <div class="chat-input">
+                <button class="icon-button" type="button" aria-label="Attach files">📎</button>
+                <button class="icon-button" type="button" aria-label="Start voice capture">🎤</button>
+                <input type="text" placeholder="Ask for forecasts, briefings, or insights..." aria-label="Message the assistant" />
+                <button class="send" type="button">Send</button>
+            </div>
+        </section>
+
+        <footer>
+            Data sources · ERP · Field reports · CRM integrations<br />
+            Owner · Director of Operations · Last voice note processed 12:04 PM
+        </footer>
+    </aside>
+</body>
+</html>
