@@ -63,10 +63,23 @@ body {
   color: #1f2432;
 }
 
-.sidebar__nav,
+.sidebar__body {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  flex: 1;
+  width: 100%;
+}
+
+.sidebar__nav {
+  display: grid;
+  gap: 8px;
+}
+
 .sidebar__footer {
   display: grid;
   gap: 8px;
+  margin-top: auto;
 }
 
 .nav-item {
@@ -811,6 +824,11 @@ body {
   .sidebar {
     padding: 28px 16px;
     align-items: center;
+  }
+
+  .sidebar__body {
+    width: 100%;
+    gap: 24px;
   }
 
   .sidebar__brand .brand-name,
