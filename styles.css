@@ -21,6 +21,7 @@
   box-sizing: border-box;
 }
 
+html,
 body {
   margin: 0;
   min-height: 100vh;
@@ -32,6 +33,7 @@ body {
   display: grid;
   grid-template-columns: 280px 1fr;
   min-height: 100vh;
+  background: var(--bg-base);
 }
 
 .sidebar {
@@ -122,6 +124,12 @@ body {
   gap: 24px;
 }
 
+.header__actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
 .search {
   background: rgba(255, 255, 255, 0.7);
   border-radius: 999px;
@@ -146,14 +154,75 @@ body {
   color: var(--muted-text);
 }
 
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 22px;
+  min-height: 56px;
+  border-radius: 999px;
+  border: none;
+  background: rgba(255, 255, 255, 0.78);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
+  color: var(--primary-text);
+  font: inherit;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  appearance: none;
+  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid rgba(243, 164, 59, 0.65);
+  outline-offset: 2px;
+}
+
+.theme-toggle[aria-pressed='true'] {
+  background: rgba(243, 164, 59, 0.24);
+  box-shadow: inset 0 0 0 1px rgba(243, 164, 59, 0.35);
+}
+
+.theme-toggle:hover {
+  background: rgba(255, 255, 255, 0.9);
+  transform: translateY(-1px);
+}
+
+.theme-toggle__icon {
+  font-size: 20px;
+}
+
+.theme-toggle__label {
+  font-size: 15px;
+}
+
+.account {
+  position: relative;
+  display: inline-flex;
+  align-items: stretch;
+}
+
 .account-chip {
   display: flex;
   align-items: center;
   gap: 14px;
-  padding: 10px 16px;
-  background: rgba(255, 255, 255, 0.75);
+  padding: 12px 22px;
+  min-height: 56px;
+  background: rgba(255, 255, 255, 0.78);
   border-radius: 999px;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
+  border: none;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  text-align: left;
+  appearance: none;
+  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.account.account--open .account-chip {
+  background: rgba(243, 164, 59, 0.24);
+  box-shadow: inset 0 0 0 1px rgba(243, 164, 59, 0.35);
 }
 
 .avatar {
@@ -181,8 +250,56 @@ body {
   color: var(--muted-text);
 }
 
+.account-chip:focus-visible {
+  outline: 2px solid rgba(243, 164, 59, 0.65);
+  outline-offset: 2px;
+}
+
+.account-chip:hover {
+  background: rgba(255, 255, 255, 0.9);
+  transform: translateY(-1px);
+}
+
 .account-chip__caret {
   color: var(--muted-text);
+  transition: transform 0.2s ease;
+}
+
+.account.account--open .account-chip__caret {
+  transform: rotate(180deg);
+}
+
+.account-menu {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  min-width: 220px;
+  background: rgba(255, 255, 255, 0.94);
+  border-radius: 16px;
+  padding: 12px;
+  border: 1px solid rgba(31, 36, 50, 0.08);
+  box-shadow: 0 18px 36px rgba(31, 36, 50, 0.18);
+  display: grid;
+  gap: 4px;
+  z-index: 10;
+}
+
+.account-menu a {
+  display: block;
+  padding: 10px 12px;
+  border-radius: 10px;
+  color: var(--primary-text);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 15px;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.account-menu a:hover,
+.account-menu a:focus-visible {
+  background: rgba(243, 164, 59, 0.16);
+  color: #1f2432;
+  outline: none;
 }
 
 .content-card {
@@ -235,7 +352,7 @@ body {
   background: rgba(196, 194, 189, 0.25);
 }
 
-.header__actions {
+.content-card__header .header__actions {
   display: flex;
   align-items: center;
   gap: 16px;
@@ -892,4 +1009,351 @@ body {
     grid-auto-flow: column;
     grid-auto-columns: 280px;
   }
+}
+
+/* Dark theme overrides */
+:is(html[data-theme='dark'], html.theme-dark) {
+  --bg-base: #141618;
+  --panel-surface: #1f1f21;
+  --primary-text: #f6f1ea;
+  --muted-text: #b7b1a7;
+  --supportive-neutral: #2c2a27;
+  --calendar-bg: #111214;
+  --accent-gradient: radial-gradient(circle at 30% 30%, #f7b24a 0%, #f29f46 55%, #e57e33 100%);
+  --accent-solid: #f7b24a;
+  --accent-alert: #f0693c;
+  --accent-success: #8fcb5b;
+}
+
+:is(html[data-theme='dark'], html.theme-dark) .sidebar {
+  background: #1f1f21;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+:is(html[data-theme='dark'], html.theme-dark) .brand-icon {
+  background: linear-gradient(135deg, #f7b24a, #e57e33);
+  color: #1b130a;
+}
+
+:is(html[data-theme='dark'], html.theme-dark) .nav-item {
+  color: #f0e8dc;
+}
+
+:is(html[data-theme='dark'], html.theme-dark) .nav-item:hover {
+  background: rgba(247, 178, 74, 0.16);
+  color: #fff4dc;
+}
+
+:is(html[data-theme='dark'], html.theme-dark) .nav-item--active {
+  background: rgba(44, 34, 24, 0.85);
+  color: #f7b24a;
+  box-shadow: inset 0 0 0 1px rgba(247, 178, 74, 0.6);
+}
+
+:is(html[data-theme='dark'], html.theme-dark) .search,
+:is(html[data-theme='dark'], html.theme-dark) .account-chip,
+:is(html[data-theme='dark'], html.theme-dark) .theme-toggle {
+  background: #2c2d2f;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+:is(html[data-theme='dark'], html.theme-dark) .theme-toggle:hover {
+  background: #343538;
+}
+
+:is(html[data-theme='dark'], html.theme-dark) .account-chip:hover {
+  background: #343538;
+}
+
+:is(html[data-theme='dark'], html.theme-dark) .account.account--open .account-chip {
+  background: rgba(247, 178, 74, 0.24);
+  box-shadow: inset 0 0 0 1px rgba(247, 178, 74, 0.45);
+  color: #fbead5;
+}
+
+:is(html[data-theme='dark'], html.theme-dark) .theme-toggle[aria-pressed='true'] {
+  background: rgba(247, 178, 74, 0.24);
+  box-shadow: inset 0 0 0 1px rgba(247, 178, 74, 0.45);
+  color: #fbead5;
+}
+
+:is(html[data-theme='dark'], html.theme-dark) .search__icon,
+:is(html[data-theme='dark'], html.theme-dark) .account-chip__email,
+:is(html[data-theme='dark'], html.theme-dark) .account-chip__caret {
+  color: #b7b1a7;
+}
+
+:is(html[data-theme='dark'], html.theme-dark) .account-menu {
+  background: rgba(32, 32, 34, 0.96);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+:is(html[data-theme='dark'], html.theme-dark) .account-menu a {
+  color: #f6f1ea;
+}
+
+:is(html[data-theme='dark'], html.theme-dark) .account-menu a:hover,
+:is(html[data-theme='dark'], html.theme-dark) .account-menu a:focus-visible {
+  background: rgba(247, 178, 74, 0.18);
+  color: #1b130a;
+}
+
+:is(html[data-theme='dark'], html.theme-dark) .avatar {
+  background: linear-gradient(135deg, rgba(247, 178, 74, 0.85), rgba(229, 126, 51, 0.85));
+  color: #1b130a;
+}
+
+:is(html[data-theme='dark'], html.theme-dark) .content-card {
+  background: #1f1f21;
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.35);
+}
+
+:is(html[data-theme='dark'], html.theme-dark) .panel {
+  background: #242527;
+  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.4);
+}
+
+:is(html[data-theme='dark'], html.theme-dark) .primary-btn {
+  background: linear-gradient(135deg, #f7b24a, #e57e33);
+  color: #1b130a;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.2);
+}
+
+:is(html[data-theme='dark'], html.theme-dark) .toggle-btn {
+  color: #cfc5b9;
+}
+
+:is(html[data-theme='dark'], html.theme-dark) .toggle-btn--active {
+  background: rgba(44, 34, 24, 0.85);
+  color: #f7b24a;
+  box-shadow: inset 0 0 0 1px rgba(247, 178, 74, 0.45);
+}
+
+:is(html[data-theme='dark'], html.theme-dark) .heatmap__legend .legend-chip--high {
+  background: rgba(247, 178, 74, 0.2);
+  color: #f7b24a;
+}
+
+:is(html[data-theme='dark'], html.theme-dark) .heatmap__legend .legend-chip--medium {
+  background: rgba(229, 126, 51, 0.15);
+  color: #f29f46;
+}
+
+:is(html[data-theme='dark'], html.theme-dark) .heatmap__legend .legend-chip--low {
+  background: rgba(72, 74, 79, 0.35);
+  color: #b7b1a7;
+}
+
+:is(html[data-theme='dark'], html.theme-dark) .heatmap__cell--peak {
+  background: linear-gradient(135deg, #f7b24a, #e57e33);
+}
+
+:is(html[data-theme='dark'], html.theme-dark) .heatmap__cell--mid {
+  background: rgba(229, 126, 51, 0.7);
+}
+
+:is(html[data-theme='dark'], html.theme-dark) .heatmap__cell--low {
+  background: rgba(72, 74, 79, 0.7);
+}
+
+:is(html[data-theme='dark'], html.theme-dark) .calendar__grid {
+  background: #1a1b1d;
+  border-radius: 20px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+
+:is(html[data-theme='dark'], html.theme-dark) .calendar__header span,
+:is(html[data-theme='dark'], html.theme-dark) .calendar__weekdays span,
+:is(html[data-theme='dark'], html.theme-dark) .calendar__nav,
+:is(html[data-theme='dark'], html.theme-dark) .day {
+  color: var(--primary-text);
+}
+
+:is(html[data-theme='dark'], html.theme-dark) .calendar__nav {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--primary-text);
+}
+
+:is(html[data-theme='dark'], html.theme-dark) .calendar__nav:hover {
+  background: rgba(247, 178, 74, 0.2);
+}
+
+:is(html[data-theme='dark'], html.theme-dark) .day {
+  background: #1f1f21;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+
+:is(html[data-theme='dark'], html.theme-dark) .day:hover {
+  background: rgba(247, 178, 74, 0.14);
+  color: #fbead5;
+}
+
+:is(html[data-theme='dark'], html.theme-dark) .day--active {
+  background: linear-gradient(135deg, #f7b24a, #e57e33);
+  color: #1b130a;
+}
+
+:is(html[data-theme='dark'], html.theme-dark) .day--scheduled {
+  background: rgba(247, 178, 74, 0.16);
+  color: #f7b24a;
+  box-shadow: inset 0 0 0 1px rgba(247, 178, 74, 0.32);
+}
+
+:is(html[data-theme='dark'], html.theme-dark) .day--peak {
+  background: rgba(240, 105, 60, 0.22);
+  color: #f0693c;
+  box-shadow: inset 0 0 0 1px rgba(240, 105, 60, 0.35);
+}
+
+:is(html[data-theme='dark'], html.theme-dark) .day.muted {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+:is(html[data-theme='dark'], html.theme-dark) .dashboard-grid {
+  color: var(--primary-text);
+}
+
+:is(html[data-theme='dark'], html.theme-dark) .group {
+  background: #242527;
+  box-shadow: 0 18px 32px rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+:is(html[data-theme='dark'], html.theme-dark) .group__title,
+:is(html[data-theme='dark'], html.theme-dark) .group__count {
+  color: var(--primary-text);
+}
+
+:is(html[data-theme='dark'], html.theme-dark) .icon-btn {
+  background: rgba(247, 178, 74, 0.12);
+  color: var(--primary-text);
+  box-shadow: inset 0 0 0 1px rgba(247, 178, 74, 0.15);
+}
+
+:is(html[data-theme='dark'], html.theme-dark) .table__header {
+  color: var(--muted-text);
+  letter-spacing: 0.02em;
+}
+
+:is(html[data-theme='dark'], html.theme-dark) .table__row {
+  background: #1f1f21;
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  box-shadow: 0 16px 28px rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+:is(html[data-theme='dark'], html.theme-dark) .checkbox__custom {
+  border: 2px solid rgba(247, 178, 74, 0.45);
+  background: #141618;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.45);
+}
+
+:is(html[data-theme='dark'], html.theme-dark) .checkbox input:checked + .checkbox__custom {
+  border-color: rgba(247, 178, 74, 0.85);
+  background: linear-gradient(135deg, #f7b24a, #e57e33);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.45);
+}
+
+:is(html[data-theme='dark'], html.theme-dark) .task__title,
+:is(html[data-theme='dark'], html.theme-dark) .task__meta,
+:is(html[data-theme='dark'], html.theme-dark) .date,
+:is(html[data-theme='dark'], html.theme-dark) .priority,
+:is(html[data-theme='dark'], html.theme-dark) .tag {
+  color: var(--primary-text);
+}
+
+:is(html[data-theme='dark'], html.theme-dark) .tag {
+  background: rgba(247, 178, 74, 0.14);
+  box-shadow: inset 0 0 0 1px rgba(247, 178, 74, 0.18);
+}
+
+:is(html[data-theme='dark'], html.theme-dark) .tag--work {
+  background: rgba(104, 149, 235, 0.16);
+  color: #d2ddff;
+  box-shadow: inset 0 0 0 1px rgba(104, 149, 235, 0.24);
+}
+
+:is(html[data-theme='dark'], html.theme-dark) .tag--health {
+  background: rgba(118, 211, 200, 0.16);
+  color: #c5f3ec;
+  box-shadow: inset 0 0 0 1px rgba(118, 211, 200, 0.24);
+}
+
+:is(html[data-theme='dark'], html.theme-dark) .priority {
+  background: rgba(255, 255, 255, 0.04);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+
+:is(html[data-theme='dark'], html.theme-dark) .priority--high {
+  background: rgba(240, 105, 60, 0.18);
+  color: var(--accent-alert);
+  box-shadow: inset 0 0 0 1px rgba(240, 105, 60, 0.35);
+}
+
+:is(html[data-theme='dark'], html.theme-dark) .priority--mid {
+  background: rgba(247, 178, 74, 0.18);
+  color: var(--accent-solid);
+  box-shadow: inset 0 0 0 1px rgba(247, 178, 74, 0.32);
+}
+
+:is(html[data-theme='dark'], html.theme-dark) .priority--low {
+  background: rgba(143, 203, 91, 0.22);
+  color: var(--accent-success);
+  box-shadow: inset 0 0 0 1px rgba(143, 203, 91, 0.35);
+}
+
+:is(html[data-theme='dark'], html.theme-dark) .board-view {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+
+:is(html[data-theme='dark'], html.theme-dark) .kanban-column {
+  background: #242527;
+  border-radius: var(--radius-md);
+  padding: 24px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  display: grid;
+  gap: 16px;
+}
+
+:is(html[data-theme='dark'], html.theme-dark) .kanban-column__header h3 {
+  color: var(--primary-text);
+}
+
+:is(html[data-theme='dark'], html.theme-dark) .badge {
+  background: rgba(247, 178, 74, 0.18);
+  color: var(--accent-solid);
+  box-shadow: inset 0 0 0 1px rgba(247, 178, 74, 0.32);
+}
+
+:is(html[data-theme='dark'], html.theme-dark) .kanban-card {
+  background: #1f1f21;
+  border-radius: var(--radius-sm);
+  padding: 20px;
+  display: grid;
+  gap: 16px;
+  box-shadow: 0 18px 32px rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+:is(html[data-theme='dark'], html.theme-dark) .kanban-card h4 {
+  color: var(--primary-text);
+}
+
+:is(html[data-theme='dark'], html.theme-dark) .card-progress__label,
+:is(html[data-theme='dark'], html.theme-dark) .kanban-card footer,
+:is(html[data-theme='dark'], html.theme-dark) .counters {
+  color: var(--muted-text);
+}
+
+:is(html[data-theme='dark'], html.theme-dark) .progress-bar {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+:is(html[data-theme='dark'], html.theme-dark) .priority--high.kanban-card {
+  border-left: 6px solid rgba(240, 105, 60, 0.6);
 }
