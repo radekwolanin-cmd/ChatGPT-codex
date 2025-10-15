@@ -390,10 +390,6 @@
           <input type="search" placeholder="Search for goals…" />
         </div>
         <div class="header__actions">
-          <button class="theme-toggle" type="button" aria-pressed="false" data-theme-toggle>
-            <span class="theme-toggle__icon" aria-hidden="true">🌙</span>
-            <span class="theme-toggle__label">Dark mode</span>
-          </button>
           <div class="account" data-account>
             <button
               class="account-chip"
@@ -410,8 +406,18 @@
               <span class="account-chip__caret" aria-hidden="true">▾</span>
             </button>
             <div class="account-menu" role="menu" aria-label="Account options" hidden data-account-menu>
-              <a href="#" role="menuitem">Settings</a>
-              <a href="#" role="menuitem">Log out</a>
+              <button class="account-menu__item account-menu__item--action theme-toggle" type="button" role="menuitem" aria-pressed="false" data-theme-toggle>
+                <span class="account-menu__icon theme-toggle__icon" aria-hidden="true">🌙</span>
+                <span class="account-menu__label theme-toggle__label">Dark mode</span>
+              </button>
+              <a class="account-menu__item" href="#" role="menuitem">
+                <span class="account-menu__icon" aria-hidden="true">⚙️</span>
+                <span class="account-menu__label">Settings</span>
+              </a>
+              <a class="account-menu__item" href="#" role="menuitem">
+                <span class="account-menu__icon" aria-hidden="true">⏻</span>
+                <span class="account-menu__label">Log out</span>
+              </a>
             </div>
           </div>
         </div>
