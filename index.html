@@ -7,6 +7,21 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script>
+    (function() {
+      const storageKey = 'taskpro-theme';
+      try {
+        const saved = localStorage.getItem(storageKey);
+        if (saved === 'dark' || (!saved && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('theme-dark');
+        } else {
+          document.documentElement.classList.add('theme-light');
+        }
+      } catch (error) {
+        document.documentElement.classList.add('theme-light');
+      }
+    })();
+  </script>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -58,13 +73,19 @@
           <span class="search__icon">🔍</span>
           <input type="search" placeholder="Search for tasks…" />
         </div>
-        <div class="account-chip">
-          <div class="avatar">AR</div>
-          <div class="account-chip__info">
-            <span class="account-chip__name">Alex Rodriguez</span>
-            <span class="account-chip__email">alexrod@gmail.com</span>
+        <div class="header__actions">
+          <button class="theme-toggle" type="button" aria-pressed="false" data-theme-toggle>
+            <span class="theme-toggle__icon" aria-hidden="true">🌙</span>
+            <span class="theme-toggle__label">Dark mode</span>
+          </button>
+          <div class="account-chip">
+            <div class="avatar">AR</div>
+            <div class="account-chip__info">
+              <span class="account-chip__name">Alex Rodriguez</span>
+              <span class="account-chip__email">alexrod@gmail.com</span>
+            </div>
+            <span class="account-chip__caret">▾</span>
           </div>
-          <span class="account-chip__caret">▾</span>
         </div>
       </header>
 
@@ -412,5 +433,6 @@
       </section>
     </main>
   </div>
+  <script src="theme.js"></script>
 </body>
 </html>
