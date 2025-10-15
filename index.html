@@ -23,6 +23,310 @@
     })();
   </script>
   <link rel="stylesheet" href="styles.css" />
+  <style>
+    :root {
+      --bg-base: #141618;
+      --panel-surface: #1f1f21;
+      --primary-text: #f6f1ea;
+      --muted-text: #b7b1a7;
+      --supportive-neutral: #2c2a27;
+      --calendar-bg: #111214;
+      --accent-gradient: radial-gradient(circle at 30% 30%, #f7b24a 0%, #f29f46 55%, #e57e33 100%);
+      --accent-solid: #f7b24a;
+      --accent-alert: #f0693c;
+      --accent-success: #8fcb5b;
+    }
+
+    body {
+      background: #141618;
+      color: var(--primary-text);
+    }
+
+    .app-shell {
+      background: #141618;
+    }
+
+    .sidebar {
+      background: #1f1f21;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    }
+
+    .brand-icon {
+      background: linear-gradient(135deg, #f7b24a, #e57e33);
+      color: #1b130a;
+    }
+
+    .nav-item {
+      color: #f0e8dc;
+    }
+
+    .nav-item:hover {
+      background: rgba(247, 178, 74, 0.16);
+      color: #fff4dc;
+    }
+
+    .nav-item--active {
+      background: rgba(44, 34, 24, 0.85);
+      color: #f7b24a;
+      box-shadow: inset 0 0 0 1px rgba(247, 178, 74, 0.6);
+    }
+
+    .search,
+    .account-chip {
+      background: #2c2d2f;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    }
+
+    .search__icon,
+    .account-chip__email,
+    .account-chip__caret {
+      color: #b7b1a7;
+    }
+
+    .avatar {
+      background: linear-gradient(135deg, rgba(247, 178, 74, 0.85), rgba(229, 126, 51, 0.85));
+      color: #1b130a;
+    }
+
+    .content-card {
+      background: #1f1f21;
+      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.35);
+    }
+
+    .panel {
+      background: #242527;
+      box-shadow: 0 18px 36px rgba(0, 0, 0, 0.4);
+    }
+
+    .primary-btn {
+      background: linear-gradient(135deg, #f7b24a, #e57e33);
+      color: #1b130a;
+      box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.2);
+    }
+
+    .toggle-btn {
+      color: #cfc5b9;
+    }
+
+    .toggle-btn--active {
+      background: rgba(44, 34, 24, 0.85);
+      color: #f7b24a;
+      box-shadow: inset 0 0 0 1px rgba(247, 178, 74, 0.45);
+    }
+
+    .heatmap__legend .legend-chip--high {
+      background: rgba(247, 178, 74, 0.2);
+      color: #f7b24a;
+    }
+
+    .heatmap__legend .legend-chip--medium {
+      background: rgba(229, 126, 51, 0.15);
+      color: #f29f46;
+    }
+
+    .heatmap__legend .legend-chip--low {
+      background: rgba(72, 74, 79, 0.35);
+      color: #b7b1a7;
+    }
+
+    .heatmap__cell--peak {
+      background: linear-gradient(135deg, #f7b24a, #e57e33);
+    }
+
+    .heatmap__cell--mid {
+      background: rgba(229, 126, 51, 0.7);
+    }
+
+    .heatmap__cell--low {
+      background: rgba(72, 74, 79, 0.7);
+    }
+
+    .calendar__grid {
+      background: #1a1b1d;
+      border-radius: 20px;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+    }
+
+    .calendar__weekdays span,
+    .calendar__header span,
+    .calendar__nav,
+    .day {
+      color: #f0e8dc;
+    }
+
+    .calendar__nav,
+    .day {
+      background: rgba(44, 34, 24, 0.35);
+    }
+
+    .day--active {
+      background: linear-gradient(135deg, #f7b24a, #e57e33);
+      color: #1b130a;
+      box-shadow: 0 0 0 1px rgba(247, 178, 74, 0.45);
+    }
+
+    .day--scheduled {
+      background: rgba(247, 178, 74, 0.18);
+      color: #f7b24a;
+    }
+
+    /* Task list + board dark theme refinements */
+    .list-view {
+      display: grid;
+      gap: 28px;
+    }
+
+    .group {
+      background: #242527;
+      border-radius: var(--radius-md);
+      padding: 24px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      display: grid;
+      gap: 20px;
+    }
+
+    .group__title {
+      color: var(--primary-text);
+    }
+
+    .group__count {
+      color: var(--muted-text);
+    }
+
+    .group__header .icon-btn,
+    .group__header .chevron {
+      background: rgba(247, 178, 74, 0.12);
+      color: var(--primary-text);
+      box-shadow: inset 0 0 0 1px rgba(247, 178, 74, 0.15);
+    }
+
+    .icon-btn {
+      background: rgba(247, 178, 74, 0.12);
+      color: var(--primary-text);
+      box-shadow: inset 0 0 0 1px rgba(247, 178, 74, 0.15);
+    }
+
+    .table__header {
+      color: var(--muted-text);
+      letter-spacing: 0.02em;
+    }
+
+    .table__row {
+      background: #1f1f21;
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+      box-shadow: 0 16px 28px rgba(0, 0, 0, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .checkbox__custom {
+      border: 2px solid rgba(247, 178, 74, 0.45);
+      background: #141618;
+      box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.45);
+    }
+
+    .checkbox input:checked + .checkbox__custom {
+      border-color: rgba(247, 178, 74, 0.85);
+      background: linear-gradient(135deg, #f7b24a, #e57e33);
+      box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.45);
+    }
+
+    .tag {
+      background: rgba(247, 178, 74, 0.14);
+      color: var(--primary-text);
+      box-shadow: inset 0 0 0 1px rgba(247, 178, 74, 0.18);
+    }
+
+    .tag--work {
+      background: rgba(104, 149, 235, 0.16);
+      color: #d2ddff;
+      box-shadow: inset 0 0 0 1px rgba(104, 149, 235, 0.24);
+    }
+
+    .tag--health {
+      background: rgba(118, 211, 200, 0.16);
+      color: #c5f3ec;
+      box-shadow: inset 0 0 0 1px rgba(118, 211, 200, 0.24);
+    }
+
+    .priority {
+      background: rgba(255, 255, 255, 0.04);
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+    }
+
+    .priority--high {
+      background: rgba(240, 105, 60, 0.18);
+      color: var(--accent-alert);
+      box-shadow: inset 0 0 0 1px rgba(240, 105, 60, 0.35);
+    }
+
+    .priority--mid {
+      background: rgba(247, 178, 74, 0.18);
+      color: var(--accent-solid);
+      box-shadow: inset 0 0 0 1px rgba(247, 178, 74, 0.32);
+    }
+
+    .priority--low {
+      background: rgba(143, 203, 91, 0.22);
+      color: var(--accent-success);
+      box-shadow: inset 0 0 0 1px rgba(143, 203, 91, 0.35);
+    }
+
+    .board-view {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 24px;
+    }
+
+    .kanban-column {
+      background: #242527;
+      border-radius: var(--radius-md);
+      padding: 24px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      display: grid;
+      gap: 16px;
+    }
+
+    .kanban-column__header h3 {
+      color: var(--primary-text);
+    }
+
+    .badge {
+      background: rgba(247, 178, 74, 0.18);
+      color: var(--accent-solid);
+      box-shadow: inset 0 0 0 1px rgba(247, 178, 74, 0.32);
+    }
+
+    .kanban-card {
+      background: #1f1f21;
+      border-radius: var(--radius-sm);
+      padding: 20px;
+      display: grid;
+      gap: 16px;
+      box-shadow: 0 18px 32px rgba(0, 0, 0, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .kanban-card h4 {
+      color: var(--primary-text);
+    }
+
+    .card-progress__label,
+    .kanban-card footer,
+    .counters {
+      color: var(--muted-text);
+    }
+
+    .progress-bar {
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .priority--high.kanban-card {
+      border-left: 6px solid rgba(240, 105, 60, 0.6);
+    }
+  </style>
 </head>
 <body>
   <div class="app-shell">
