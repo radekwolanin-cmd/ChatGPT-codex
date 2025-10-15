@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TaskPro Dashboard Template</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script>
+    (function () {
+      const storageKey = 'taskpro-theme';
+      const docEl = document.documentElement;
+
+      function seed(theme) {
+        const isDark = theme === 'dark';
+        docEl.setAttribute('data-theme', isDark ? 'dark' : 'light');
+        docEl.classList.toggle('theme-dark', isDark);
+        docEl.classList.toggle('theme-light', !isDark);
+      }
+
+      try {
+        const saved = localStorage.getItem(storageKey);
+        if (
+          saved === 'dark' ||
+          (!saved && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)
+        ) {
+          seed('dark');
+        } else {
+          seed('light');
+        }
+      } catch (error) {
+        seed('light');
+      }
+    })();
+  </script>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="sidebar__brand">
+        <span class="brand-icon">▤</span>
+        <span class="brand-name">TaskPro</span>
+      </div>
+      <div class="sidebar__body">
+        <nav class="sidebar__nav">
+          <a href="dashboard.html" class="nav-item nav-item--active">
+            <span class="nav-icon">📊</span>
+            <span class="nav-label">Dashboard</span>
+          </a>
+          <a href="index.html" class="nav-item">
+            <span class="nav-icon">🗂️</span>
+            <span class="nav-label">Tasks</span>
+          </a>
+          <a href="goals.html" class="nav-item">
+            <span class="nav-icon">🎯</span>
+            <span class="nav-label">Goals</span>
+          </a>
+        </nav>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="main__header">
+        <div class="search">
+          <span class="search__icon">🔍</span>
+          <input type="search" placeholder="Search portfolio…" />
+        </div>
+        <div class="header__actions">
+          <div class="account" data-account>
+            <button
+              class="account-chip"
+              type="button"
+              aria-haspopup="true"
+              aria-expanded="false"
+              data-account-toggle
+            >
+              <div class="avatar">AR</div>
+              <div class="account-chip__info">
+                <span class="account-chip__name">Alex Rodriguez</span>
+                <span class="account-chip__email">alexrod@gmail.com</span>
+              </div>
+              <span class="account-chip__caret" aria-hidden="true">▾</span>
+            </button>
+            <div class="account-menu" role="menu" aria-label="Account options" hidden data-account-menu>
+              <button class="account-menu__item account-menu__item--action theme-toggle" type="button" role="menuitem" aria-pressed="false" data-theme-toggle>
+                <span class="account-menu__icon theme-toggle__icon" aria-hidden="true">🌙</span>
+                <span class="account-menu__label theme-toggle__label">Dark mode</span>
+              </button>
+              <a class="account-menu__item" href="#" role="menuitem">
+                <span class="account-menu__icon" aria-hidden="true">⚙️</span>
+                <span class="account-menu__label">Settings</span>
+              </a>
+              <a class="account-menu__item" href="#" role="menuitem">
+                <span class="account-menu__icon" aria-hidden="true">⏻</span>
+                <span class="account-menu__label">Log out</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <section class="content-card">
+        <div class="content-card__header">
+          <div class="header__title">
+            <h1>Portfolio Overview</h1>
+            <div class="header__meta">
+              <span class="meta-chip meta-chip--success">On track</span>
+              <span class="meta-chip meta-chip--neutral">Q4 FY25</span>
+            </div>
+          </div>
+          <div class="header__actions">
+            <button class="primary-btn">
+              <span class="plus">＋</span>
+              <span>New Insight</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="summary-grid">
+          <article class="summary-card">
+            <header class="summary-card__header">
+              <span class="summary-card__label">Budget Utilization</span>
+              <span class="summary-card__delta summary-card__delta--positive">+4.2%</span>
+            </header>
+            <div class="summary-card__value">$1.28M</div>
+            <div class="progress-track">
+              <span class="progress-track__bar" style="width: 68%"></span>
+            </div>
+            <footer class="summary-card__footer">68% of $1.9M program budget</footer>
+          </article>
+
+          <article class="summary-card">
+            <header class="summary-card__header">
+              <span class="summary-card__label">Forecast Variance</span>
+              <span class="summary-card__delta summary-card__delta--neutral">Stable</span>
+            </header>
+            <div class="summary-card__value">$72K</div>
+            <div class="variance-bars">
+              <span class="variance-bars__baseline"></span>
+              <span class="variance-bars__value" style="width: 24%"></span>
+            </div>
+            <footer class="summary-card__footer">Projected underrun versus baseline</footer>
+          </article>
+
+          <article class="summary-card">
+            <header class="summary-card__header">
+              <span class="summary-card__label">Active Risks</span>
+              <span class="summary-card__delta summary-card__delta--alert">3 critical</span>
+            </header>
+            <div class="summary-card__value">12</div>
+            <ul class="risk-chips">
+              <li class="risk-chip risk-chip--critical">Critical</li>
+              <li class="risk-chip risk-chip--high">High</li>
+              <li class="risk-chip risk-chip--medium">Medium</li>
+            </ul>
+            <footer class="summary-card__footer">Escalations reviewed weekly</footer>
+          </article>
+
+          <article class="summary-card">
+            <header class="summary-card__header">
+              <span class="summary-card__label">Team Capacity</span>
+              <span class="summary-card__delta summary-card__delta--positive">+6%</span>
+            </header>
+            <div class="summary-card__value">84%</div>
+            <div class="capacity-rings">
+              <span class="capacity-rings__slice" style="--value: 0.84"></span>
+            </div>
+            <footer class="summary-card__footer">Utilization across 7 squads</footer>
+          </article>
+        </div>
+
+        <div class="insights-grid">
+          <article class="panel panel--chart">
+            <header class="panel__header">
+              <div>
+                <h2>Revenue vs. Cost Trend</h2>
+                <p>Rolling three-month burn-up including forecast</p>
+              </div>
+              <span class="panel__tag">USD ($000s)</span>
+            </header>
+            <div class="line-chart">
+              <div class="line-chart__grid">
+                <span class="line-chart__axis">120</span>
+                <span class="line-chart__axis">90</span>
+                <span class="line-chart__axis">60</span>
+                <span class="line-chart__axis">30</span>
+                <span class="line-chart__axis">0</span>
+              </div>
+              <div class="line-chart__series line-chart__series--revenue"></div>
+              <div class="line-chart__series line-chart__series--cost"></div>
+              <ul class="line-chart__legend">
+                <li><span class="dot dot--revenue"></span>Revenue</li>
+                <li><span class="dot dot--cost"></span>Delivery cost</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="panel panel--chart">
+            <header class="panel__header">
+              <div>
+                <h2>Financial Allocation</h2>
+                <p>Budget mix across priority programs</p>
+              </div>
+            </header>
+            <div class="donut-chart">
+              <div class="donut-chart__ring"></div>
+              <ul class="donut-chart__legend">
+                <li><span class="swatch swatch--product"></span>Product innovation</li>
+                <li><span class="swatch swatch--infra"></span>Platform &amp; infrastructure</li>
+                <li><span class="swatch swatch--services"></span>Client services</li>
+                <li><span class="swatch swatch--ops"></span>Operations</li>
+              </ul>
+            </div>
+          </article>
+        </div>
+
+        <div class="insights-grid insights-grid--wide">
+          <article class="panel panel--table">
+            <header class="panel__header">
+              <div>
+                <h2>Program Health</h2>
+                <p>Risk profile by initiative</p>
+              </div>
+            </header>
+            <div class="health-table">
+              <div class="health-table__row health-table__row--head">
+                <span>Program</span>
+                <span>Status</span>
+                <span>Budget</span>
+                <span>Next milestone</span>
+              </div>
+              <div class="health-table__row">
+                <span>Atlas CRM revamp</span>
+                <span class="status status--on-track">On track</span>
+                <span>$420K</span>
+                <span>Beta launch · Dec 12</span>
+              </div>
+              <div class="health-table__row">
+                <span>Mobile expansion</span>
+                <span class="status status--at-risk">At risk</span>
+                <span>$310K</span>
+                <span>Payments v2 · Nov 28</span>
+              </div>
+              <div class="health-table__row">
+                <span>Data lake modernization</span>
+                <span class="status status--attention">Needs attention</span>
+                <span>$265K</span>
+                <span>Phase 2 kickoff · Jan 8</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="panel panel--table">
+            <header class="panel__header">
+              <div>
+                <h2>Quarterly Objectives</h2>
+                <p>Delivery velocity and financial impact</p>
+              </div>
+            </header>
+            <div class="objective-grid">
+              <div class="objective">
+                <h3>Accelerate onboarding</h3>
+                <p class="objective__meta">Target ROI: 162%</p>
+                <div class="progress-track progress-track--thin">
+                  <span class="progress-track__bar" style="width: 76%"></span>
+                </div>
+                <span class="objective__footer">Milestone: automation rollout</span>
+              </div>
+              <div class="objective">
+                <h3>Stabilize infrastructure</h3>
+                <p class="objective__meta">CapEx burn: $184K</p>
+                <div class="progress-track progress-track--thin">
+                  <span class="progress-track__bar progress-track__bar--warning" style="width: 54%"></span>
+                </div>
+                <span class="objective__footer">Milestone: regional failover</span>
+              </div>
+              <div class="objective">
+                <h3>Expand enterprise pipeline</h3>
+                <p class="objective__meta">Forecast lift: $3.4M</p>
+                <div class="progress-track progress-track--thin">
+                  <span class="progress-track__bar progress-track__bar--success" style="width: 88%"></span>
+                </div>
+                <span class="objective__footer">Milestone: contracts signed</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+  </div>
+  <script src="theme.js"></script>
+</body>
+</html>
