@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,6 +7,27 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script>
+    (function () {
+      const storageKey = 'taskpro-theme';
+      const docEl = document.documentElement;
+
+      function apply(theme) {
+        docEl.setAttribute('data-theme', theme === 'dark' ? 'dark' : 'light');
+      }
+
+      try {
+        const saved = localStorage.getItem(storageKey);
+        if (saved === 'dark' || (!saved && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          apply('dark');
+        } else {
+          apply('light');
+        }
+      } catch (error) {
+        apply('light');
+      }
+    })();
+  </script>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -56,15 +77,33 @@
       <header class="main__header">
         <div class="search">
           <span class="search__icon">🔍</span>
-          <input type="search" placeholder="Search for tasks…" />
+          <input type="search" placeholder="Search for goals…" />
         </div>
-        <div class="account-chip">
-          <div class="avatar">AR</div>
-          <div class="account-chip__info">
-            <span class="account-chip__name">Alex Rodriguez</span>
-            <span class="account-chip__email">alexrod@gmail.com</span>
+        <div class="header__actions">
+          <button class="theme-toggle" type="button" aria-pressed="false" data-theme-toggle>
+            <span class="theme-toggle__icon" aria-hidden="true">🌙</span>
+            <span class="theme-toggle__label">Dark mode</span>
+          </button>
+          <div class="account" data-account>
+            <button
+              class="account-chip"
+              type="button"
+              aria-haspopup="true"
+              aria-expanded="false"
+              data-account-toggle
+            >
+              <div class="avatar">AR</div>
+              <div class="account-chip__info">
+                <span class="account-chip__name">Alex Rodriguez</span>
+                <span class="account-chip__email">alexrod@gmail.com</span>
+              </div>
+              <span class="account-chip__caret" aria-hidden="true">▾</span>
+            </button>
+            <div class="account-menu" role="menu" aria-label="Account options" hidden data-account-menu>
+              <a href="#" role="menuitem">Settings</a>
+              <a href="#" role="menuitem">Log out</a>
+            </div>
           </div>
-          <span class="account-chip__caret">▾</span>
         </div>
       </header>
 
@@ -412,5 +451,6 @@
       </section>
     </main>
   </div>
+  <script src="theme.js"></script>
 </body>
 </html>
