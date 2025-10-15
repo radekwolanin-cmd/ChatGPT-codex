@@ -3,11 +3,18 @@
   const docEl = document.documentElement;
 
   function getCurrentTheme() {
-    return docEl.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+    const attr = docEl.getAttribute('data-theme');
+    if (attr === 'dark' || attr === 'light') {
+      return attr;
+    }
+    return docEl.classList.contains('theme-dark') ? 'dark' : 'light';
   }
 
   function applyTheme(theme) {
-    docEl.setAttribute('data-theme', theme === 'dark' ? 'dark' : 'light');
+    const isDark = theme === 'dark';
+    docEl.setAttribute('data-theme', isDark ? 'dark' : 'light');
+    docEl.classList.toggle('theme-dark', isDark);
+    docEl.classList.toggle('theme-light', !isDark);
   }
 
   function updateToggleButtons(theme) {
@@ -32,11 +39,10 @@
 
   function determineInitialTheme() {
     const stored = safeLocalStorage('get');
-    if (stored) {
+    if (stored === 'dark' || stored === 'light') {
       return stored;
     }
-    const attr = docEl.getAttribute('data-theme');
-    return attr === 'dark' ? 'dark' : 'light';
+    return getCurrentTheme();
   }
 
   function safeLocalStorage(action, value) {

@@ -12,19 +12,25 @@
       const storageKey = 'taskpro-theme';
       const docEl = document.documentElement;
 
-      function apply(theme) {
-        docEl.setAttribute('data-theme', theme === 'dark' ? 'dark' : 'light');
+      function seed(theme) {
+        const isDark = theme === 'dark';
+        docEl.setAttribute('data-theme', isDark ? 'dark' : 'light');
+        docEl.classList.toggle('theme-dark', isDark);
+        docEl.classList.toggle('theme-light', !isDark);
       }
 
       try {
         const saved = localStorage.getItem(storageKey);
-        if (saved === 'dark' || (!saved && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-          apply('dark');
+        if (
+          saved === 'dark' ||
+          (!saved && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)
+        ) {
+          seed('dark');
         } else {
-          apply('light');
+          seed('light');
         }
       } catch (error) {
-        apply('light');
+        seed('light');
       }
     })();
   </script>
