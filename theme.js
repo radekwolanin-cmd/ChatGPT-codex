@@ -161,10 +161,72 @@
     });
   }
 
+  function initViewSwitchers() {
+    const switchers = document.querySelectorAll('[data-view-switch]');
+    if (!switchers.length) {
+      return;
+    }
+
+    switchers.forEach((switcher) => {
+      const group = switcher.getAttribute('data-view-group') || '';
+      const sections = Array.from(
+        document.querySelectorAll(`[data-view-section][data-view-group="${group}"]`)
+      );
+      const buttons = Array.from(switcher.querySelectorAll('[data-view-toggle]'));
+
+      if (!buttons.length || !sections.length) {
+        return;
+      }
+
+      function activate(targetId, triggerButton) {
+        sections.forEach((section) => {
+          const isActive = section.id === targetId;
+          section.hidden = !isActive;
+          section.setAttribute('aria-hidden', String(!isActive));
+        });
+
+        buttons.forEach((button) => {
+          const isActive = button === triggerButton;
+          button.classList.toggle('toggle-btn--active', isActive);
+          button.setAttribute('aria-pressed', String(isActive));
+        });
+      }
+
+      let activeSet = false;
+
+      buttons.forEach((button) => {
+        const targetId = button.getAttribute('data-view-target');
+        if (!targetId) {
+          return;
+        }
+
+        if (button.classList.contains('toggle-btn--active')) {
+          activate(targetId, button);
+          activeSet = true;
+        }
+
+        button.addEventListener('click', () => {
+          activate(targetId, button);
+        });
+      });
+
+      if (!activeSet) {
+        const fallback = buttons[0];
+        if (fallback) {
+          const targetId = fallback.getAttribute('data-view-target');
+          if (targetId) {
+            activate(targetId, fallback);
+          }
+        }
+      }
+    });
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
     const initialTheme = determineInitialTheme();
     syncTheme(initialTheme);
     initThemeToggle();
     initAccountMenus();
+    initViewSwitchers();
   });
 })();

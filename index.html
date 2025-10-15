@@ -411,9 +411,25 @@
             <h1>My Tasks</h1>
           </div>
           <div class="header__actions">
-            <div class="view-toggle">
-              <button class="toggle-btn toggle-btn--active">List</button>
-              <button class="toggle-btn">Board</button>
+            <div class="view-toggle" data-view-switch data-view-group="tasks">
+              <button
+                class="toggle-btn toggle-btn--active"
+                type="button"
+                aria-pressed="true"
+                data-view-toggle
+                data-view-target="tasks-list-view"
+              >
+                List
+              </button>
+              <button
+                class="toggle-btn"
+                type="button"
+                aria-pressed="false"
+                data-view-toggle
+                data-view-target="tasks-board-view"
+              >
+                Board
+              </button>
             </div>
             <button class="primary-btn">
               <span class="plus">＋</span>
@@ -422,7 +438,7 @@
           </div>
         </div>
 
-        <div class="list-view">
+        <div class="list-view" id="tasks-list-view" data-view-section data-view-group="tasks" aria-hidden="false">
           <div class="group">
             <div class="group__header">
               <div>
@@ -519,9 +535,77 @@
               </div>
             </div>
           </div>
+
+          <div class="group">
+            <div class="group__header">
+              <div>
+                <button class="chevron">⌄</button>
+                <span class="group__title">Done</span>
+                <span class="group__count">4 tasks</span>
+              </div>
+              <button class="icon-btn">⋮</button>
+            </div>
+            <div class="table">
+              <div class="table__row">
+                <label class="checkbox">
+                  <input type="checkbox" checked />
+                  <span class="checkbox__custom"></span>
+                </label>
+                <div class="task">
+                  <span class="task__title">Archive sprint assets</span>
+                  <span class="task__meta">Completed yesterday</span>
+                </div>
+                <div class="date"><span class="icon">🗓</span> Nov 14</div>
+                <div class="tags">
+                  <span class="tag tag--work">Work</span>
+                </div>
+                <span class="priority priority--low">Low</span>
+                <button class="icon-btn">⋮</button>
+              </div>
+              <div class="table__row">
+                <label class="checkbox">
+                  <input type="checkbox" checked />
+                  <span class="checkbox__custom"></span>
+                </label>
+                <div class="task">
+                  <span class="task__title">Submit expense report</span>
+                  <span class="task__meta">Approved</span>
+                </div>
+                <div class="date"><span class="icon">🗓</span> Nov 10</div>
+                <div class="tags">
+                  <span class="tag">Finance</span>
+                </div>
+                <span class="priority priority--mid">Mid</span>
+                <button class="icon-btn">⋮</button>
+              </div>
+              <div class="table__row">
+                <label class="checkbox">
+                  <input type="checkbox" checked />
+                  <span class="checkbox__custom"></span>
+                </label>
+                <div class="task">
+                  <span class="task__title">Wrap user interviews</span>
+                  <span class="task__meta">Notes shared</span>
+                </div>
+                <div class="date"><span class="icon">🗓</span> Nov 08</div>
+                <div class="tags">
+                  <span class="tag">UX</span>
+                </div>
+                <span class="priority priority--mid">Mid</span>
+                <button class="icon-btn">⋮</button>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div class="board-view">
+        <div
+          class="board-view"
+          id="tasks-board-view"
+          data-view-section
+          data-view-group="tasks"
+          aria-hidden="true"
+          hidden
+        >
           <div class="kanban-column">
             <div class="kanban-column__header">
               <h3>To Do <span class="badge">2</span></h3>
