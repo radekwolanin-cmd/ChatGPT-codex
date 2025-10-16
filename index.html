@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,6 +7,33 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script>
+    (function () {
+      const storageKey = 'taskpro-theme';
+      const docEl = document.documentElement;
+
+      function seed(theme) {
+        const isDark = theme === 'dark';
+        docEl.setAttribute('data-theme', isDark ? 'dark' : 'light');
+        docEl.classList.toggle('theme-dark', isDark);
+        docEl.classList.toggle('theme-light', !isDark);
+      }
+
+      try {
+        const saved = localStorage.getItem(storageKey);
+        if (
+          saved === 'dark' ||
+          (!saved && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)
+        ) {
+          seed('dark');
+        } else {
+          seed('light');
+        }
+      } catch (error) {
+        seed('light');
+      }
+    })();
+  </script>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -18,7 +45,7 @@
       </div>
       <div class="sidebar__body">
         <nav class="sidebar__nav">
-          <a href="#" class="nav-item">
+          <a href="dashboard.html" class="nav-item">
             <span class="nav-icon">📊</span>
             <span class="nav-label">Dashboard</span>
           </a>
@@ -30,25 +57,7 @@
             <span class="nav-icon">🎯</span>
             <span class="nav-label">Goals</span>
           </a>
-          <a href="#" class="nav-item">
-            <span class="nav-icon">⏱️</span>
-            <span class="nav-label">Time</span>
-          </a>
-          <a href="#" class="nav-item">
-            <span class="nav-icon">🗓️</span>
-            <span class="nav-label">Calendar</span>
-          </a>
         </nav>
-        <div class="sidebar__footer">
-          <a href="#" class="nav-item">
-            <span class="nav-icon">⚙️</span>
-            <span class="nav-label">Settings</span>
-          </a>
-          <a href="#" class="nav-item">
-            <span class="nav-icon">⏻</span>
-            <span class="nav-label">Log Out</span>
-          </a>
-        </div>
       </div>
     </aside>
 
@@ -58,13 +67,37 @@
           <span class="search__icon">🔍</span>
           <input type="search" placeholder="Search for tasks…" />
         </div>
-        <div class="account-chip">
-          <div class="avatar">AR</div>
-          <div class="account-chip__info">
-            <span class="account-chip__name">Alex Rodriguez</span>
-            <span class="account-chip__email">alexrod@gmail.com</span>
+        <div class="header__actions">
+          <div class="account" data-account>
+            <button
+              class="account-chip"
+              type="button"
+              aria-haspopup="true"
+              aria-expanded="false"
+              data-account-toggle
+            >
+              <div class="avatar">AR</div>
+              <div class="account-chip__info">
+                <span class="account-chip__name">Alex Rodriguez</span>
+                <span class="account-chip__email">alexrod@gmail.com</span>
+              </div>
+              <span class="account-chip__caret" aria-hidden="true">▾</span>
+            </button>
+            <div class="account-menu" role="menu" aria-label="Account options" hidden data-account-menu>
+              <button class="account-menu__item account-menu__item--action theme-toggle" type="button" role="menuitem" aria-pressed="false" data-theme-toggle>
+                <span class="account-menu__icon theme-toggle__icon" aria-hidden="true">🌙</span>
+                <span class="account-menu__label theme-toggle__label">Dark mode</span>
+              </button>
+              <a class="account-menu__item" href="#" role="menuitem">
+                <span class="account-menu__icon" aria-hidden="true">⚙️</span>
+                <span class="account-menu__label">Settings</span>
+              </a>
+              <a class="account-menu__item" href="#" role="menuitem">
+                <span class="account-menu__icon" aria-hidden="true">⏻</span>
+                <span class="account-menu__label">Log out</span>
+              </a>
+            </div>
           </div>
-          <span class="account-chip__caret">▾</span>
         </div>
       </header>
 
@@ -74,9 +107,25 @@
             <h1>My Tasks</h1>
           </div>
           <div class="header__actions">
-            <div class="view-toggle">
-              <button class="toggle-btn toggle-btn--active">List</button>
-              <button class="toggle-btn">Board</button>
+            <div class="view-toggle" data-view-switch data-view-group="tasks">
+              <button
+                class="toggle-btn toggle-btn--active"
+                type="button"
+                aria-pressed="true"
+                data-view-toggle
+                data-view-target="tasks-list-view"
+              >
+                List
+              </button>
+              <button
+                class="toggle-btn"
+                type="button"
+                aria-pressed="false"
+                data-view-toggle
+                data-view-target="tasks-board-view"
+              >
+                Board
+              </button>
             </div>
             <button class="primary-btn">
               <span class="plus">＋</span>
@@ -85,109 +134,7 @@
           </div>
         </div>
 
-        <div class="dashboard-grid">
-          <div class="panel activity-overview">
-            <h2>Activity Overview</h2>
-            <div class="heatmap">
-              <div class="heatmap__legend">
-                <span class="legend-label">Workout Focus</span>
-                <span class="legend-chip legend-chip--high">High</span>
-                <span class="legend-chip legend-chip--medium">Mid</span>
-                <span class="legend-chip legend-chip--low">Low</span>
-              </div>
-              <div class="heatmap__grid">
-                <div class="heatmap__cell heatmap__cell--peak"></div>
-                <div class="heatmap__cell heatmap__cell--mid"></div>
-                <div class="heatmap__cell heatmap__cell--low"></div>
-                <div class="heatmap__cell heatmap__cell--mid"></div>
-                <div class="heatmap__cell heatmap__cell--peak"></div>
-                <div class="heatmap__cell heatmap__cell--low"></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="panel metrics">
-            <h2>Daily Snapshot</h2>
-            <div class="metrics__grid">
-              <div class="metric-card metric-card--burn">
-                <div class="metric-ring">
-                  <div class="ring-inner">742<br /><span>Calories</span></div>
-                </div>
-                <p>Calorie Burn</p>
-              </div>
-              <div class="metric-card metric-card--progress">
-                <div class="metric-ring metric-ring--success">
-                  <div class="ring-inner">68%<br /><span>Goal</span></div>
-                </div>
-                <p>Weight Loss</p>
-              </div>
-              <div class="metric-card metric-card--focus">
-                <div class="metric-ring metric-ring--focus">
-                  <div class="ring-inner">4h<br /><span>Focus</span></div>
-                </div>
-                <p>Deep Work</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="panel calendar">
-            <h2>Schedule</h2>
-            <div class="calendar__grid">
-              <div class="calendar__header">
-                <button class="calendar__nav">‹</button>
-                <span>November 2025</span>
-                <button class="calendar__nav">›</button>
-              </div>
-              <div class="calendar__weekdays">
-                <span>Sun</span>
-                <span>Mon</span>
-                <span>Tue</span>
-                <span>Wed</span>
-                <span>Thu</span>
-                <span>Fri</span>
-                <span>Sat</span>
-              </div>
-              <div class="calendar__days">
-                <button class="day muted">27</button>
-                <button class="day muted">28</button>
-                <button class="day muted">29</button>
-                <button class="day muted">30</button>
-                <button class="day">1</button>
-                <button class="day">2</button>
-                <button class="day day--active">3</button>
-                <button class="day">4</button>
-                <button class="day day--scheduled">5</button>
-                <button class="day">6</button>
-                <button class="day">7</button>
-                <button class="day">8</button>
-                <button class="day day--scheduled">9</button>
-                <button class="day">10</button>
-                <button class="day">11</button>
-                <button class="day">12</button>
-                <button class="day">13</button>
-                <button class="day">14</button>
-                <button class="day day--peak">15</button>
-                <button class="day">16</button>
-                <button class="day">17</button>
-                <button class="day">18</button>
-                <button class="day">19</button>
-                <button class="day day--scheduled">20</button>
-                <button class="day">21</button>
-                <button class="day">22</button>
-                <button class="day">23</button>
-                <button class="day">24</button>
-                <button class="day">25</button>
-                <button class="day">26</button>
-                <button class="day">27</button>
-                <button class="day">28</button>
-                <button class="day">29</button>
-                <button class="day">30</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="list-view">
+        <div class="list-view" id="tasks-list-view" data-view-section data-view-group="tasks" aria-hidden="false">
           <div class="group">
             <div class="group__header">
               <div>
@@ -284,9 +231,77 @@
               </div>
             </div>
           </div>
+
+          <div class="group">
+            <div class="group__header">
+              <div>
+                <button class="chevron">⌄</button>
+                <span class="group__title">Done</span>
+                <span class="group__count">4 tasks</span>
+              </div>
+              <button class="icon-btn">⋮</button>
+            </div>
+            <div class="table">
+              <div class="table__row">
+                <label class="checkbox">
+                  <input type="checkbox" checked />
+                  <span class="checkbox__custom"></span>
+                </label>
+                <div class="task">
+                  <span class="task__title">Archive sprint assets</span>
+                  <span class="task__meta">Completed yesterday</span>
+                </div>
+                <div class="date"><span class="icon">🗓</span> Nov 14</div>
+                <div class="tags">
+                  <span class="tag tag--work">Work</span>
+                </div>
+                <span class="priority priority--low">Low</span>
+                <button class="icon-btn">⋮</button>
+              </div>
+              <div class="table__row">
+                <label class="checkbox">
+                  <input type="checkbox" checked />
+                  <span class="checkbox__custom"></span>
+                </label>
+                <div class="task">
+                  <span class="task__title">Submit expense report</span>
+                  <span class="task__meta">Approved</span>
+                </div>
+                <div class="date"><span class="icon">🗓</span> Nov 10</div>
+                <div class="tags">
+                  <span class="tag">Finance</span>
+                </div>
+                <span class="priority priority--mid">Mid</span>
+                <button class="icon-btn">⋮</button>
+              </div>
+              <div class="table__row">
+                <label class="checkbox">
+                  <input type="checkbox" checked />
+                  <span class="checkbox__custom"></span>
+                </label>
+                <div class="task">
+                  <span class="task__title">Wrap user interviews</span>
+                  <span class="task__meta">Notes shared</span>
+                </div>
+                <div class="date"><span class="icon">🗓</span> Nov 08</div>
+                <div class="tags">
+                  <span class="tag">UX</span>
+                </div>
+                <span class="priority priority--mid">Mid</span>
+                <button class="icon-btn">⋮</button>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div class="board-view">
+        <div
+          class="board-view"
+          id="tasks-board-view"
+          data-view-section
+          data-view-group="tasks"
+          aria-hidden="true"
+          hidden
+        >
           <div class="kanban-column">
             <div class="kanban-column__header">
               <h3>To Do <span class="badge">2</span></h3>
@@ -412,5 +427,6 @@
       </section>
     </main>
   </div>
+  <script src="theme.js"></script>
 </body>
 </html>
