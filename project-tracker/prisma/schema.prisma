@@ -1,0 +1,246 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  OWNER
+  MEMBER
+  GUEST
+}
+
+enum ProjectStatus {
+  TO_DO
+  IN_PROGRESS
+  DONE
+}
+
+enum ProjectPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum EstimateType {
+  VENDOR
+  CUSTOMER
+}
+
+enum EstimateStatus {
+  DRAFT
+  SENT
+  ACCEPTED
+  REJECTED
+}
+
+enum OrderStatus {
+  DRAFT
+  SENT
+  FULFILLED
+  CANCELLED
+}
+
+model User {
+  id            String      @id @default(cuid())
+  name          String?
+  email         String?     @unique
+  emailVerified DateTime?
+  image         String?
+  role          Role        @default(MEMBER)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  accounts      Account[]
+  sessions      Session[]
+  projects      Project[]   @relation("ProjectCreator")
+  updates       Project[]   @relation("ProjectUpdater")
+  comments      Comment[]   @relation("CommentAuthor")
+  attachments      Attachment[]
+  estimatesCreated Estimate[] @relation("EstimateCreatedBy")
+  estimatesUpdated Estimate[] @relation("EstimateUpdatedBy")
+  ordersCreated    Order[]    @relation("OrderCreatedBy")
+  ordersUpdated    Order[]    @relation("OrderUpdatedBy")
+  activities       Activity[] @relation("ActivityActor")
+  customers     Customer[]  @relation("CustomerOwner")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @map("refresh_token")
+  access_token      String? @map("access_token")
+  expires_at        Int?    @map("expires_at")
+  token_type        String? @map("token_type")
+  scope             String?
+  id_token          String? @map("id_token")
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Customer {
+  id        String   @id @default(cuid())
+  name      String
+  email     String?
+  phone     String?
+  company   String?
+  notes     String?
+  ownerId   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  projects  Project[]
+  owner     User     @relation("CustomerOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+}
+
+model Project {
+  id                String            @id @default(cuid())
+  name              String
+  description       String            @default("")
+  status            ProjectStatus     @default(TO_DO)
+  priority          ProjectPriority   @default(MEDIUM)
+  deadline          DateTime?
+  budgetVendor      Decimal?          @db.Decimal(10, 2)
+  budgetInternal    Decimal?          @db.Decimal(10, 2)
+  budgetCustomer    Decimal?          @db.Decimal(10, 2)
+  customerId        String?
+  createdById       String
+  updatedById       String
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+  archivedAt        DateTime?
+  overdueNotifiedAt DateTime?
+  customer          Customer?         @relation(fields: [customerId], references: [id])
+  createdBy         User              @relation("ProjectCreator", fields: [createdById], references: [id])
+  updatedBy         User              @relation("ProjectUpdater", fields: [updatedById], references: [id])
+  tags              ProjectTag[]
+  attachments       Attachment[]
+  comments          Comment[]
+  estimates         Estimate[]
+  orders            Order[]
+  activity          Activity[]
+  statusHistory     ProjectStatusHistory[]
+
+  @@index([status, deadline])
+  @@index([customerId])
+}
+
+model ProjectTag {
+  id        String   @id @default(cuid())
+  projectId String
+  tag       String
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId, tag], map: "idx_project_tag")
+}
+
+model ProjectStatusHistory {
+  id        String        @id @default(cuid())
+  projectId String
+  from      ProjectStatus?
+  to        ProjectStatus
+  changedAt DateTime      @default(now())
+  changedBy String
+  project   Project       @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  actor     User          @relation(fields: [changedBy], references: [id], onDelete: Cascade)
+}
+
+model Attachment {
+  id           String   @id @default(cuid())
+  projectId    String
+  url          String
+  fileName     String
+  fileSize     Int
+  mimeType     String
+  uploadedById String
+  createdAt    DateTime @default(now())
+  project      Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  uploadedBy   User     @relation(fields: [uploadedById], references: [id], onDelete: Cascade)
+}
+
+model Comment {
+  id        String    @id @default(cuid())
+  projectId String
+  authorId  String
+  parentId  String?
+  body      String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  project   Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  author    User      @relation("CommentAuthor", fields: [authorId], references: [id], onDelete: Cascade)
+  parent    Comment?  @relation("Thread", fields: [parentId], references: [id])
+  replies   Comment[] @relation("Thread")
+}
+
+model Estimate {
+  id          String         @id @default(cuid())
+  projectId   String
+  type        EstimateType
+  title       String
+  vendor      String?
+  amount      Decimal        @db.Decimal(12, 2)
+  currency    String         @default("USD")
+  status      EstimateStatus @default(DRAFT)
+  validUntil  DateTime?
+  notes       String?
+  createdById String
+  updatedById String
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  project     Project        @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  createdBy   User           @relation("EstimateCreatedBy", fields: [createdById], references: [id], onDelete: Cascade)
+  updatedBy   User           @relation("EstimateUpdatedBy", fields: [updatedById], references: [id], onDelete: Cascade)
+}
+
+model Order {
+  id          String      @id @default(cuid())
+  projectId   String
+  vendor      String
+  reference   String
+  subtotal    Decimal     @db.Decimal(12, 2)
+  tax         Decimal     @db.Decimal(12, 2)
+  total       Decimal     @db.Decimal(12, 2)
+  notes       String?
+  status      OrderStatus @default(DRAFT)
+  createdById String
+  updatedById String
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  project     Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  createdBy   User        @relation("OrderCreatedBy", fields: [createdById], references: [id], onDelete: Cascade)
+  updatedBy   User        @relation("OrderUpdatedBy", fields: [updatedById], references: [id], onDelete: Cascade)
+}
+
+model Activity {
+  id        String   @id @default(cuid())
+  projectId String
+  actorId   String
+  action    String
+  payload   Json
+  createdAt DateTime @default(now())
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  actor     User     @relation("ActivityActor", fields: [actorId], references: [id], onDelete: Cascade)
+}
