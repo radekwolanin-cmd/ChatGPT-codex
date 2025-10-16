@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TaskPro Dashboard Template</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script>
+    (function () {
+      const storageKey = 'taskpro-theme';
+      const docEl = document.documentElement;
+
+      function seed(theme) {
+        const isDark = theme === 'dark';
+        docEl.setAttribute('data-theme', isDark ? 'dark' : 'light');
+        docEl.classList.toggle('theme-dark', isDark);
+        docEl.classList.toggle('theme-light', !isDark);
+      }
+
+      try {
+        const saved = localStorage.getItem(storageKey);
+        if (
+          saved === 'dark' ||
+          (!saved && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)
+        ) {
+          seed('dark');
+        } else {
+          seed('light');
+        }
+      } catch (error) {
+        seed('light');
+      }
+    })();
+  </script>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    :root {
+      --bg-base: #141618;
+      --panel-surface: #1f1f21;
+      --primary-text: #f6f1ea;
+      --muted-text: #b7b1a7;
+      --supportive-neutral: #2c2a27;
+      --calendar-bg: #111214;
+      --accent-gradient: radial-gradient(circle at 30% 30%, #f7b24a 0%, #f29f46 55%, #e57e33 100%);
+      --accent-solid: #f7b24a;
+      --accent-alert: #f0693c;
+      --accent-success: #8fcb5b;
+    }
+
+    body {
+      background: #141618;
+      color: var(--primary-text);
+    }
+
+    .app-shell {
+      background: #141618;
+    }
+
+    .sidebar {
+      background: #1f1f21;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    }
+
+    .brand-icon {
+      background: linear-gradient(135deg, #f7b24a, #e57e33);
+      color: #1b130a;
+    }
+
+    .nav-item {
+      color: #f0e8dc;
+    }
+
+    .nav-item:hover {
+      background: rgba(247, 178, 74, 0.16);
+      color: #fff4dc;
+    }
+
+    .nav-item--active {
+      background: rgba(44, 34, 24, 0.85);
+      color: #f7b24a;
+      box-shadow: inset 0 0 0 1px rgba(247, 178, 74, 0.6);
+    }
+
+    .search,
+    .account-chip {
+      background: #2c2d2f;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    }
+
+    .search__icon,
+    .account-chip__email,
+    .account-chip__caret {
+      color: #b7b1a7;
+    }
+
+    .avatar {
+      background: linear-gradient(135deg, rgba(247, 178, 74, 0.85), rgba(229, 126, 51, 0.85));
+      color: #1b130a;
+    }
+
+    .content-card {
+      background: #1f1f21;
+      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.35);
+    }
+
+    .panel {
+      background: #242527;
+      box-shadow: 0 18px 36px rgba(0, 0, 0, 0.4);
+    }
+
+    .primary-btn {
+      background: linear-gradient(135deg, #f7b24a, #e57e33);
+      color: #1b130a;
+      box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.2);
+    }
+
+    .toggle-btn {
+      color: #cfc5b9;
+    }
+
+    .toggle-btn--active {
+      background: rgba(44, 34, 24, 0.85);
+      color: #f7b24a;
+      box-shadow: inset 0 0 0 1px rgba(247, 178, 74, 0.45);
+    }
+
+    .heatmap__legend .legend-chip--high {
+      background: rgba(247, 178, 74, 0.2);
+      color: #f7b24a;
+    }
+
+    .heatmap__legend .legend-chip--medium {
+      background: rgba(229, 126, 51, 0.15);
+      color: #f29f46;
+    }
+
+    .heatmap__legend .legend-chip--low {
+      background: rgba(72, 74, 79, 0.35);
+      color: #b7b1a7;
+    }
+
+    .heatmap__cell--peak {
+      background: linear-gradient(135deg, #f7b24a, #e57e33);
+    }
+
+    .heatmap__cell--mid {
+      background: rgba(229, 126, 51, 0.7);
+    }
+
+    .heatmap__cell--low {
+      background: rgba(72, 74, 79, 0.7);
+    }
+
+    .calendar__grid {
+      background: #1a1b1d;
+      border-radius: 20px;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+    }
+
+    .calendar__weekdays span,
+    .calendar__header span,
+    .calendar__nav,
+    .day {
+      color: #f0e8dc;
+    }
+
+    .calendar__nav,
+    .day {
+      background: rgba(44, 34, 24, 0.35);
+    }
+
+    .day--active {
+      background: linear-gradient(135deg, #f7b24a, #e57e33);
+      color: #1b130a;
+      box-shadow: 0 0 0 1px rgba(247, 178, 74, 0.45);
+    }
+
+    .day--scheduled {
+      background: rgba(247, 178, 74, 0.18);
+      color: #f7b24a;
+    }
+
+    /* Task list + board dark theme refinements */
+    .list-view {
+      display: grid;
+      gap: 28px;
+    }
+
+    .group {
+      background: #242527;
+      border-radius: var(--radius-md);
+      padding: 24px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      display: grid;
+      gap: 20px;
+    }
+
+    .group__title {
+      color: var(--primary-text);
+    }
+
+    .group__count {
+      color: var(--muted-text);
+    }
+
+    .group__header .icon-btn,
+    .group__header .chevron {
+      background: rgba(247, 178, 74, 0.12);
+      color: var(--primary-text);
+      box-shadow: inset 0 0 0 1px rgba(247, 178, 74, 0.15);
+    }
+
+    .icon-btn {
+      background: rgba(247, 178, 74, 0.12);
+      color: var(--primary-text);
+      box-shadow: inset 0 0 0 1px rgba(247, 178, 74, 0.15);
+    }
+
+    .table__header {
+      color: var(--muted-text);
+      letter-spacing: 0.02em;
+    }
+
+    .table__row {
+      background: #1f1f21;
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+      box-shadow: 0 16px 28px rgba(0, 0, 0, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .checkbox__custom {
+      border: 2px solid rgba(247, 178, 74, 0.45);
+      background: #141618;
+      box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.45);
+    }
+
+    .checkbox input:checked + .checkbox__custom {
+      border-color: rgba(247, 178, 74, 0.85);
+      background: linear-gradient(135deg, #f7b24a, #e57e33);
+      box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.45);
+    }
+
+    .tag {
+      background: rgba(247, 178, 74, 0.14);
+      color: var(--primary-text);
+      box-shadow: inset 0 0 0 1px rgba(247, 178, 74, 0.18);
+    }
+
+    .tag--work {
+      background: rgba(104, 149, 235, 0.16);
+      color: #d2ddff;
+      box-shadow: inset 0 0 0 1px rgba(104, 149, 235, 0.24);
+    }
+
+    .tag--health {
+      background: rgba(118, 211, 200, 0.16);
+      color: #c5f3ec;
+      box-shadow: inset 0 0 0 1px rgba(118, 211, 200, 0.24);
+    }
+
+    .priority {
+      background: rgba(255, 255, 255, 0.04);
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+    }
+
+    .priority--high {
+      background: rgba(240, 105, 60, 0.18);
+      color: var(--accent-alert);
+      box-shadow: inset 0 0 0 1px rgba(240, 105, 60, 0.35);
+    }
+
+    .priority--mid {
+      background: rgba(247, 178, 74, 0.18);
+      color: var(--accent-solid);
+      box-shadow: inset 0 0 0 1px rgba(247, 178, 74, 0.32);
+    }
+
+    .priority--low {
+      background: rgba(143, 203, 91, 0.22);
+      color: var(--accent-success);
+      box-shadow: inset 0 0 0 1px rgba(143, 203, 91, 0.35);
+    }
+
+    .board-view {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 24px;
+    }
+
+    .kanban-column {
+      background: #242527;
+      border-radius: var(--radius-md);
+      padding: 24px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      display: grid;
+      gap: 16px;
+    }
+
+    .kanban-column__header h3 {
+      color: var(--primary-text);
+    }
+
+    .badge {
+      background: rgba(247, 178, 74, 0.18);
+      color: var(--accent-solid);
+      box-shadow: inset 0 0 0 1px rgba(247, 178, 74, 0.32);
+    }
+
+    .kanban-card {
+      background: #1f1f21;
+      border-radius: var(--radius-sm);
+      padding: 20px;
+      display: grid;
+      gap: 16px;
+      box-shadow: 0 18px 32px rgba(0, 0, 0, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .kanban-card h4 {
+      color: var(--primary-text);
+    }
+
+    .card-progress__label,
+    .kanban-card footer,
+    .counters {
+      color: var(--muted-text);
+    }
+
+    .progress-bar {
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .priority--high.kanban-card {
+      border-left: 6px solid rgba(240, 105, 60, 0.6);
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="sidebar__brand">
+        <span class="brand-icon">▤</span>
+        <span class="brand-name">TaskPro</span>
+      </div>
+      <div class="sidebar__body">
+        <nav class="sidebar__nav">
+          <a href="dashboard.html" class="nav-item">
+            <span class="nav-icon">📊</span>
+            <span class="nav-label">Dashboard</span>
+          </a>
+          <a href="index.html" class="nav-item nav-item--active">
+            <span class="nav-icon">🗂️</span>
+            <span class="nav-label">Tasks</span>
+          </a>
+          <a href="goals.html" class="nav-item">
+            <span class="nav-icon">🎯</span>
+            <span class="nav-label">Goals</span>
+          </a>
+        </nav>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="main__header">
+        <div class="search">
+          <span class="search__icon">🔍</span>
+          <input type="search" placeholder="Search for tasks…" />
+        </div>
+        <div class="header__actions">
+          <div class="account" data-account>
+            <button
+              class="account-chip"
+              type="button"
+              aria-haspopup="true"
+              aria-expanded="false"
+              data-account-toggle
+            >
+              <div class="avatar">AR</div>
+              <div class="account-chip__info">
+                <span class="account-chip__name">Alex Rodriguez</span>
+                <span class="account-chip__email">alexrod@gmail.com</span>
+              </div>
+              <span class="account-chip__caret" aria-hidden="true">▾</span>
+            </button>
+            <div class="account-menu" role="menu" aria-label="Account options" hidden data-account-menu>
+              <button class="account-menu__item account-menu__item--action theme-toggle" type="button" role="menuitem" aria-pressed="false" data-theme-toggle>
+                <span class="account-menu__icon theme-toggle__icon" aria-hidden="true">🌙</span>
+                <span class="account-menu__label theme-toggle__label">Dark mode</span>
+              </button>
+              <a class="account-menu__item" href="#" role="menuitem">
+                <span class="account-menu__icon" aria-hidden="true">⚙️</span>
+                <span class="account-menu__label">Settings</span>
+              </a>
+              <a class="account-menu__item" href="#" role="menuitem">
+                <span class="account-menu__icon" aria-hidden="true">⏻</span>
+                <span class="account-menu__label">Log out</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <section class="content-card">
+        <div class="content-card__header">
+          <div class="header__title">
+            <h1>My Tasks</h1>
+          </div>
+          <div class="header__actions">
+            <div class="view-toggle" data-view-switch data-view-group="tasks">
+              <button
+                class="toggle-btn toggle-btn--active"
+                type="button"
+                aria-pressed="true"
+                data-view-toggle
+                data-view-target="tasks-list-view"
+              >
+                List
+              </button>
+              <button
+                class="toggle-btn"
+                type="button"
+                aria-pressed="false"
+                data-view-toggle
+                data-view-target="tasks-board-view"
+              >
+                Board
+              </button>
+            </div>
+            <button class="primary-btn">
+              <span class="plus">＋</span>
+              <span>New Task</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="list-view" id="tasks-list-view" data-view-section data-view-group="tasks" aria-hidden="false">
+          <div class="group">
+            <div class="group__header">
+              <div>
+                <button class="chevron">⌄</button>
+                <span class="group__title">To Do</span>
+                <span class="group__count">6 tasks</span>
+              </div>
+              <button class="icon-btn">⋮</button>
+            </div>
+            <div class="table">
+              <div class="table__header">
+                <span class="col col--task">Task</span>
+                <span class="col">Due Date</span>
+                <span class="col">Tags</span>
+                <span class="col">Priority</span>
+              </div>
+              <div class="table__row">
+                <label class="checkbox">
+                  <input type="checkbox" />
+                  <span class="checkbox__custom"></span>
+                </label>
+                <div class="task">
+                  <span class="task__title">Create sprint roadmap</span>
+                  <span class="task__meta">Subtasks 2/5 · 3 comments</span>
+                </div>
+                <div class="date"><span class="icon">🗓</span> Nov 17</div>
+                <div class="tags">
+                  <span class="tag tag--work">Work</span>
+                </div>
+                <span class="priority priority--high">High</span>
+                <button class="icon-btn">⋮</button>
+              </div>
+              <div class="table__row">
+                <label class="checkbox">
+                  <input type="checkbox" />
+                  <span class="checkbox__custom"></span>
+                </label>
+                <div class="task">
+                  <span class="task__title">Review onboarding flow</span>
+                  <span class="task__meta">Due tomorrow</span>
+                </div>
+                <div class="date overdue"><span class="icon">🗓</span> Nov 15</div>
+                <div class="tags">
+                  <span class="tag tag--health">Health</span>
+                </div>
+                <span class="priority priority--mid">Mid</span>
+                <button class="icon-btn">⋮</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="group">
+            <div class="group__header">
+              <div>
+                <button class="chevron">⌄</button>
+                <span class="group__title">In Progress</span>
+                <span class="group__count">3 tasks</span>
+              </div>
+              <button class="icon-btn">⋮</button>
+            </div>
+            <div class="table">
+              <div class="table__row">
+                <label class="checkbox">
+                  <input type="checkbox" checked />
+                  <span class="checkbox__custom"></span>
+                </label>
+                <div class="task">
+                  <span class="task__title">Website development</span>
+                  <span class="task__meta">4/6 subtasks</span>
+                </div>
+                <div class="date"><span class="icon">🗓</span> Nov 21</div>
+                <div class="tags">
+                  <span class="tag tag--work">Work</span>
+                  <span class="tag">UI</span>
+                </div>
+                <span class="priority priority--mid">Mid</span>
+                <button class="icon-btn">⋮</button>
+              </div>
+              <div class="table__row">
+                <label class="checkbox">
+                  <input type="checkbox" />
+                  <span class="checkbox__custom"></span>
+                </label>
+                <div class="task">
+                  <span class="task__title">Plan fitness challenge</span>
+                  <span class="task__meta">New attachments</span>
+                </div>
+                <div class="date"><span class="icon">🗓</span> Nov 19</div>
+                <div class="tags">
+                  <span class="tag tag--health">Health</span>
+                </div>
+                <span class="priority priority--low">Low</span>
+                <button class="icon-btn">⋮</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="group">
+            <div class="group__header">
+              <div>
+                <button class="chevron">⌄</button>
+                <span class="group__title">Done</span>
+                <span class="group__count">4 tasks</span>
+              </div>
+              <button class="icon-btn">⋮</button>
+            </div>
+            <div class="table">
+              <div class="table__row">
+                <label class="checkbox">
+                  <input type="checkbox" checked />
+                  <span class="checkbox__custom"></span>
+                </label>
+                <div class="task">
+                  <span class="task__title">Archive sprint assets</span>
+                  <span class="task__meta">Completed yesterday</span>
+                </div>
+                <div class="date"><span class="icon">🗓</span> Nov 14</div>
+                <div class="tags">
+                  <span class="tag tag--work">Work</span>
+                </div>
+                <span class="priority priority--low">Low</span>
+                <button class="icon-btn">⋮</button>
+              </div>
+              <div class="table__row">
+                <label class="checkbox">
+                  <input type="checkbox" checked />
+                  <span class="checkbox__custom"></span>
+                </label>
+                <div class="task">
+                  <span class="task__title">Submit expense report</span>
+                  <span class="task__meta">Approved</span>
+                </div>
+                <div class="date"><span class="icon">🗓</span> Nov 10</div>
+                <div class="tags">
+                  <span class="tag">Finance</span>
+                </div>
+                <span class="priority priority--mid">Mid</span>
+                <button class="icon-btn">⋮</button>
+              </div>
+              <div class="table__row">
+                <label class="checkbox">
+                  <input type="checkbox" checked />
+                  <span class="checkbox__custom"></span>
+                </label>
+                <div class="task">
+                  <span class="task__title">Wrap user interviews</span>
+                  <span class="task__meta">Notes shared</span>
+                </div>
+                <div class="date"><span class="icon">🗓</span> Nov 08</div>
+                <div class="tags">
+                  <span class="tag">UX</span>
+                </div>
+                <span class="priority priority--mid">Mid</span>
+                <button class="icon-btn">⋮</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="board-view"
+          id="tasks-board-view"
+          data-view-section
+          data-view-group="tasks"
+          aria-hidden="true"
+          hidden
+        >
+          <div class="kanban-column">
+            <div class="kanban-column__header">
+              <h3>To Do <span class="badge">2</span></h3>
+              <button class="icon-btn">⋮</button>
+            </div>
+            <article class="kanban-card priority--mid">
+              <header>
+                <h4>Plan marketing launch</h4>
+                <button class="icon-btn">⋮</button>
+              </header>
+              <div class="card-progress">
+                <div class="card-progress__label">Progress <span>2/5</span></div>
+                <div class="progress-bar"><span style="width: 40%"></span></div>
+              </div>
+              <div class="card-tags">
+                <span class="tag tag--work">Work</span>
+              </div>
+              <footer>
+                <span class="date"><span class="icon">🗓</span> Nov 18</span>
+                <div class="counters">
+                  <span class="counter">💬 3</span>
+                  <span class="counter">📎 1</span>
+                </div>
+              </footer>
+            </article>
+            <article class="kanban-card priority--high">
+              <header>
+                <h4>Fix mobile bugs</h4>
+                <button class="icon-btn">⋮</button>
+              </header>
+              <div class="card-progress">
+                <div class="card-progress__label">Progress <span>1/3</span></div>
+                <div class="progress-bar"><span style="width: 33%"></span></div>
+              </div>
+              <div class="card-tags">
+                <span class="tag tag--work">Work</span>
+              </div>
+              <footer>
+                <span class="date overdue"><span class="icon">🗓</span> Nov 14</span>
+                <div class="counters">
+                  <span class="counter">💬 1</span>
+                  <span class="counter">📎 2</span>
+                </div>
+              </footer>
+            </article>
+          </div>
+
+          <div class="kanban-column">
+            <div class="kanban-column__header">
+              <h3>In Progress <span class="badge">2</span></h3>
+              <button class="icon-btn">⋮</button>
+            </div>
+            <article class="kanban-card priority--mid">
+              <header>
+                <h4>Website redesign</h4>
+                <button class="icon-btn">⋮</button>
+              </header>
+              <div class="card-progress">
+                <div class="card-progress__label">Progress <span>4/6</span></div>
+                <div class="progress-bar"><span style="width: 65%"></span></div>
+              </div>
+              <div class="card-tags">
+                <span class="tag tag--work">Work</span>
+                <span class="tag">UX</span>
+              </div>
+              <footer>
+                <span class="date"><span class="icon">🗓</span> Nov 20</span>
+                <div class="counters">
+                  <span class="counter">💬 5</span>
+                  <span class="counter">📎 4</span>
+                </div>
+              </footer>
+            </article>
+            <article class="kanban-card priority--low">
+              <header>
+                <h4>Prepare wellness guide</h4>
+                <button class="icon-btn">⋮</button>
+              </header>
+              <div class="card-progress">
+                <div class="card-progress__label">Progress <span>3/8</span></div>
+                <div class="progress-bar"><span style="width: 37%"></span></div>
+              </div>
+              <div class="card-tags">
+                <span class="tag tag--health">Health</span>
+              </div>
+              <footer>
+                <span class="date"><span class="icon">🗓</span> Nov 24</span>
+                <div class="counters">
+                  <span class="counter">💬 0</span>
+                  <span class="counter">📎 2</span>
+                </div>
+              </footer>
+            </article>
+          </div>
+
+          <div class="kanban-column">
+            <div class="kanban-column__header">
+              <h3>Done <span class="badge">1</span></h3>
+              <button class="icon-btn">⋮</button>
+            </div>
+            <article class="kanban-card priority--low">
+              <header>
+                <h4>Archive sprint assets</h4>
+                <button class="icon-btn">⋮</button>
+              </header>
+              <div class="card-progress">
+                <div class="card-progress__label">Progress <span>6/6</span></div>
+                <div class="progress-bar"><span style="width: 100%"></span></div>
+              </div>
+              <div class="card-tags">
+                <span class="tag tag--work">Work</span>
+              </div>
+              <footer>
+                <span class="date"><span class="icon">🗓</span> Nov 12</span>
+                <div class="counters">
+                  <span class="counter">💬 4</span>
+                  <span class="counter">📎 3</span>
+                </div>
+              </footer>
+            </article>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+  <script src="theme.js"></script>
+</body>
+</html>
