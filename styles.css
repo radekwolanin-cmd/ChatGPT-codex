@@ -115,10 +115,10 @@ body {
 }
 
 .main {
-  padding: 40px 48px;
+  padding: 28px 36px;
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 24px;
 }
 
 .main__header {
