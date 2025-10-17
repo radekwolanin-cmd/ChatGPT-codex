@@ -67,10 +67,10 @@ export function ProjectBoard({ projects }: ProjectBoardProps) {
 
 function Column({ title, status, projects }: { title: string; status: ProjectStatus; projects: ProjectListEntry[] }) {
   return (
-    <div className="flex flex-col gap-4 rounded-3xl border border-white/10 bg-white/5 p-4 shadow-card">
+    <div className="flex flex-col gap-4 rounded-3xl border border-slate-200/70 bg-white p-4 shadow-card dark:border-white/10 dark:bg-white/5">
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-200">
-          {title} <span className="ml-2 text-xs text-slate-400">{projects.length}</span>
+        <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-700 dark:text-slate-200">
+          {title} <span className="ml-2 text-xs text-slate-500 dark:text-slate-400">{projects.length}</span>
         </h3>
         <StatusBadge status={status} />
       </div>
@@ -80,7 +80,7 @@ function Column({ title, status, projects }: { title: string; status: ProjectSta
             <Card key={project.id} project={project} status={status} />
           ))}
           {!projects.length && (
-            <div className="rounded-2xl border border-dashed border-white/15 bg-white/5 p-6 text-center text-xs text-slate-400">
+            <div className="rounded-2xl border border-dashed border-slate-300 bg-slate-100 p-6 text-center text-xs text-slate-500 dark:border-white/15 dark:bg-white/5 dark:text-slate-400">
               Drop projects here
             </div>
           )}
@@ -111,25 +111,27 @@ function Card({ project, status }: { project: ProjectListEntry; status: ProjectS
       {...attributes}
       {...listeners}
       style={style}
-      className="rounded-2xl border border-white/10 bg-slate-950/80 p-4 text-sm text-white shadow-elevated"
+      className="rounded-2xl border border-slate-200/70 bg-white p-4 text-sm text-slate-800 shadow-elevated dark:border-white/10 dark:bg-slate-950/80 dark:text-white"
     >
       <div className="flex items-start justify-between gap-3">
         <div>
-          <h4 className="font-semibold">{project.name}</h4>
-          <p className="text-xs text-slate-400">{project.customer?.name ?? "No customer"}</p>
+          <h4 className="font-semibold text-slate-900 dark:text-white">{project.name}</h4>
+          <p className="text-xs text-slate-500 dark:text-slate-400">{project.customer?.name ?? "No customer"}</p>
         </div>
         <PriorityBadge priority={project.priority} />
       </div>
-      <div className="mt-3 flex flex-wrap items-center gap-2 text-xs text-slate-300">
+      <div className="mt-3 flex flex-wrap items-center gap-2 text-xs text-slate-500 dark:text-slate-300">
         {project.tags.map((tag) => (
           <Badge key={tag.id} variant="outline">
             #{tag.tag}
           </Badge>
         ))}
         {deadline && (
-          <span className={overdue ? "text-rose-300" : "text-slate-300"}>{format(deadline, "MMM d")}</span>
+          <span className={overdue ? "text-rose-500 dark:text-rose-300" : "text-slate-500 dark:text-slate-300"}>
+            {format(deadline, "MMM d")}
+          </span>
         )}
-        <span className="text-slate-400">{project._count?.attachments ?? 0} files</span>
+        <span className="text-slate-500 dark:text-slate-400">{project._count?.attachments ?? 0} files</span>
       </div>
     </article>
   );

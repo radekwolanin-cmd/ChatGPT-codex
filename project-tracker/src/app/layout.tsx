@@ -14,12 +14,12 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${inter.variable} ${space.variable}`}> 
-      <body className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-950/95 to-slate-950 text-slate-50">
+    <html lang="en" className={`${inter.variable} ${space.variable}`}>
+      <body className="min-h-screen bg-slate-50 text-slate-900 transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100">
         <SessionProvider>
           <ThemeProvider>
             <div className="relative min-h-screen">
-              <div className="pointer-events-none absolute inset-x-0 top-0 h-64 bg-glow-gradient opacity-60" />
+              <div className="pointer-events-none absolute inset-x-0 top-0 h-64 bg-slate-200/40 blur-3xl dark:bg-glow-gradient dark:opacity-60" />
               <main className="relative z-10 min-h-screen">{children}</main>
             </div>
           </ThemeProvider>

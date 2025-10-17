@@ -23,18 +23,18 @@ export function LoginCard() {
   }
 
   return (
-    <div className="w-full max-w-md rounded-2xl border border-white/10 bg-white/10 p-8 text-slate-50 shadow-elevated backdrop-blur">
-      <h1 className="text-2xl font-semibold">Welcome back</h1>
-      <p className="mt-2 text-sm text-slate-200/80">Sign in with email or your connected provider.</p>
+    <div className="w-full max-w-md rounded-2xl border border-slate-200/70 bg-white p-8 text-slate-800 shadow-elevated backdrop-blur dark:border-white/10 dark:bg-white/10 dark:text-slate-50">
+      <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">Welcome back</h1>
+      <p className="mt-2 text-sm text-slate-600 dark:text-slate-200/80">Sign in with email or your connected provider.</p>
       <form onSubmit={handleEmailLogin} className="mt-6 space-y-3">
         <div>
-          <label className="text-sm text-slate-200">Email</label>
+          <label className="text-sm text-slate-700 dark:text-slate-200">Email</label>
           <input
             type="email"
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="mt-1 w-full rounded-lg border border-white/20 bg-white/5 px-3 py-2 text-base text-white outline-none transition focus:border-brand-400 focus:ring focus:ring-brand-500/20"
+            className="mt-1 w-full rounded-lg border border-slate-200/70 bg-white px-3 py-2 text-base text-slate-800 outline-none transition focus:border-brand-400 focus:ring focus:ring-brand-500/20 dark:border-white/20 dark:bg-white/5 dark:text-white"
             placeholder="you@company.com"
           />
         </div>
@@ -49,18 +49,18 @@ export function LoginCard() {
       <div className="mt-6 flex flex-col gap-2">
         <button
           onClick={() => signIn("google")}
-          className="w-full rounded-lg border border-white/15 bg-white/5 px-4 py-2 text-sm font-medium transition hover:border-white/30 hover:bg-white/10"
+          className="w-full rounded-lg border border-slate-200/70 bg-white px-4 py-2 text-sm font-medium transition hover:border-slate-400 hover:bg-slate-100 dark:border-white/15 dark:bg-white/5 dark:hover:border-white/30 dark:hover:bg-white/10"
         >
           Continue with Google
         </button>
         <button
           onClick={() => signIn("azure-ad")}
-          className="w-full rounded-lg border border-white/15 bg-white/5 px-4 py-2 text-sm font-medium transition hover:border-white/30 hover:bg-white/10"
+          className="w-full rounded-lg border border-slate-200/70 bg-white px-4 py-2 text-sm font-medium transition hover:border-slate-400 hover:bg-slate-100 dark:border-white/15 dark:bg-white/5 dark:hover:border-white/30 dark:hover:bg-white/10"
         >
           Continue with Azure AD
         </button>
       </div>
-      {message && <p className="mt-4 text-sm text-emerald-200">{message}</p>}
+      {message && <p className="mt-4 text-sm text-emerald-600 dark:text-emerald-200">{message}</p>}
     </div>
   );
 }

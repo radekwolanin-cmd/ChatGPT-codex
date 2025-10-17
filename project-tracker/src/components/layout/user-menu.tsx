@@ -15,16 +15,16 @@ export function UserMenu({ name, email }: UserMenuProps) {
     <div className="relative">
       <button
         onClick={() => setOpen((o) => !o)}
-        className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-sm font-medium text-white shadow-card transition hover:border-white/30 hover:bg-white/10"
+        className="flex items-center gap-2 rounded-full border border-slate-200/70 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 shadow-card transition hover:border-slate-400 hover:bg-slate-100 dark:border-white/10 dark:bg-white/5 dark:text-white dark:hover:border-white/30 dark:hover:bg-white/10"
       >
         <span className="truncate max-w-[8rem]">{name ?? email ?? "Account"}</span>
         <ChevronDown className="h-4 w-4" />
       </button>
       {open ? (
-        <div className="absolute right-0 top-11 w-48 rounded-xl border border-white/10 bg-slate-950/95 p-3 text-sm shadow-elevated">
-          <div className="mb-3 text-xs text-slate-400">
+        <div className="absolute right-0 top-11 w-48 rounded-xl border border-slate-200/70 bg-white p-3 text-sm shadow-elevated dark:border-white/10 dark:bg-slate-950/95">
+          <div className="mb-3 text-xs text-slate-500 dark:text-slate-400">
             Signed in as
-            <div className="truncate text-slate-200">{email}</div>
+            <div className="truncate text-slate-700 dark:text-slate-200">{email}</div>
           </div>
           <button
             onClick={() => signOut({ callbackUrl: "/login" })}

@@ -13,9 +13,13 @@ export function useTheme(): [ThemeMode, (mode: ThemeMode) => void, () => void] {
     if (saved) {
       setMode(saved);
       document.documentElement.classList.toggle("dark", saved === "dark");
+      document.documentElement.dataset.theme = saved;
     } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
       setMode("dark");
       document.documentElement.classList.add("dark");
+      document.documentElement.dataset.theme = "dark";
+    } else {
+      document.documentElement.dataset.theme = "light";
     }
   }, []);
 
@@ -23,6 +27,7 @@ export function useTheme(): [ThemeMode, (mode: ThemeMode) => void, () => void] {
     setMode(next);
     window.localStorage.setItem(THEME_KEY, next);
     document.documentElement.classList.toggle("dark", next === "dark");
+    document.documentElement.dataset.theme = next;
   };
 
   const toggle = () => {
