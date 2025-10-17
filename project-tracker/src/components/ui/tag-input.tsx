@@ -20,9 +20,9 @@ export function TagInput({ value, onChange }: TagInputProps) {
 
   return (
     <div className="flex flex-wrap items-center gap-2">
-      {value.map((tag) => (
+      {value.map((tag, index) => (
         <button
-          key={tag}
+          key={`${tag}-${index}`}
           onClick={() => onChange(value.filter((t) => t !== tag))}
           className="rounded-full bg-white/10 px-3 py-1 text-xs text-white hover:bg-white/20"
         >
