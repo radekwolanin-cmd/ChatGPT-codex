@@ -10,7 +10,6 @@ import type { Role } from "@prisma/client";
 export const authConfig = {
   adapter: PrismaAdapter(prisma) as unknown as Adapter,
   session: { strategy: "database" },
-  allowDangerousEmailAccountLinking: true,
   providers: [
     EmailProvider({
       server: process.env.EMAIL_SERVER,
@@ -21,6 +20,7 @@ export const authConfig = {
           GoogleProvider({
             clientId: process.env.GOOGLE_CLIENT_ID,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+            allowDangerousEmailAccountLinking: true,
           }),
         ]
       : []),
@@ -29,6 +29,7 @@ export const authConfig = {
           AzureADProvider({
             clientId: process.env.AZURE_AD_CLIENT_ID,
             clientSecret: process.env.AZURE_AD_CLIENT_SECRET,
+            allowDangerousEmailAccountLinking: true,
           }),
         ]
       : []),
