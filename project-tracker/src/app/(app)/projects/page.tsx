@@ -7,22 +7,24 @@ import { ProjectListSection } from "@/components/projects/project-list-section";
 import { ProjectBoard } from "@/components/projects/project-board";
 import { Card } from "@/components/ui/card";
 
-interface ProjectsPageProps {
-  searchParams: Record<string, string | string[] | undefined>;
-}
+type ProjectsPageProps = {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+};
 
 export default async function ProjectsPage({ searchParams }: ProjectsPageProps) {
   const user = await getCurrentUser();
   if (!user) redirect("/login");
 
-  const view = (typeof searchParams.view === "string" ? searchParams.view : "list") as "list" | "board";
-  const q = typeof searchParams.q === "string" ? searchParams.q : undefined;
+  const params = (await searchParams) ?? {};
 
-  const statusParam = typeof searchParams.status === "string" ? searchParams.status : undefined;
+  const view = (typeof params.view === "string" ? params.view : "list") as "list" | "board";
+  const q = typeof params.q === "string" ? params.q : undefined;
+
+  const statusParam = typeof params.status === "string" ? params.status : undefined;
   const statusValues: ProjectStatus[] = ["TO_DO", "IN_PROGRESS", "DONE"];
   const status = statusValues.includes(statusParam as ProjectStatus) ? (statusParam as ProjectStatus) : undefined;
 
-  const priorityParam = typeof searchParams.priority === "string" ? searchParams.priority : undefined;
+  const priorityParam = typeof params.priority === "string" ? params.priority : undefined;
   const priorityValues: ProjectPriority[] = ["LOW", "MEDIUM", "HIGH", "URGENT"];
   const priority = priorityValues.includes(priorityParam as ProjectPriority)
     ? (priorityParam as ProjectPriority)
@@ -47,7 +49,7 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
         </div>
         <div className="flex items-center gap-3">
           <Link
-            href={{ pathname: "/projects", query: { ...searchParams, view: view === "list" ? "board" : "list" } }}
+            href={{ pathname: "/projects", query: { ...params, view: view === "list" ? "board" : "list" } }}
             className="rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm text-white hover:bg-white/20"
           >
             Switch to {view === "list" ? "Board" : "List"} view

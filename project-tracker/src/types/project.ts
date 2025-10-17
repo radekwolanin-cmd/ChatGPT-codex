@@ -1,4 +1,15 @@
-import type { Project, Customer, ProjectTag, Estimate, Order, Attachment, Comment, Activity } from "@prisma/client";
+import type {
+  Project,
+  Customer,
+  ProjectTag,
+  Estimate,
+  Order,
+  Attachment,
+  Comment,
+  Activity,
+  ProjectStatus,
+  ProjectPriority,
+} from "@prisma/client";
 
 export type ProjectWithRelations = Project & {
   customer: Customer | null;
@@ -14,7 +25,16 @@ export type ProjectWithRelations = Project & {
   };
 };
 
-export type ProjectListEntry = Pick<
-  ProjectWithRelations,
-  "id" | "name" | "status" | "priority" | "deadline" | "customer" | "tags" | "_count"
->;
+export type ProjectListEntry = {
+  id: string;
+  name: string;
+  status: ProjectStatus;
+  priority: ProjectPriority;
+  deadline: string | null;
+  customer: { id: string; name: string | null } | null;
+  tags: { id: string; tag: string }[];
+  _count: {
+    attachments: number;
+    comments: number;
+  };
+};

@@ -1,16 +1,7 @@
 import crypto from "crypto";
 import { prisma } from "@/server/db";
 import { getRedis, invalidate } from "@/server/redis";
-import type {
-  ProjectStatus,
-  ProjectPriority,
-  Role,
-  EstimateType,
-  EstimateStatus,
-  Customer,
-  Project,
-  TransactionClient,
-} from "@prisma/client";
+import type { Prisma, ProjectStatus, ProjectPriority, Role, EstimateType, EstimateStatus, Customer, Project } from "@prisma/client";
 import type { ProjectCreateInput, ProjectUpdateInput } from "@/lib/validators/project";
 import type { CommentCreateInput } from "@/lib/validators/comment";
 import type { EstimateCreateInput, EstimateUpdateInput } from "@/lib/validators/estimate";
@@ -70,7 +61,7 @@ export async function listProjects(userId: string, params: ListParams): Promise<
     ];
   }
 
-  const items: ProjectListItem[] = await prisma.project.findMany({
+  const records = await prisma.project.findMany({
     where,
     include: {
       customer: true,
@@ -85,10 +76,24 @@ export async function listProjects(userId: string, params: ListParams): Promise<
   });
 
   let nextCursor: string | null = null;
-  if (items.length > limit) {
-    const nextItem = items.pop();
+  if (records.length > limit) {
+    const nextItem = records.pop();
     nextCursor = nextItem?.id ?? null;
   }
+
+  const items: ProjectListItem[] = records.map((project) => ({
+    id: project.id,
+    name: project.name,
+    status: project.status,
+    priority: project.priority,
+    deadline: project.deadline ? project.deadline.toISOString() : null,
+    customer: project.customer ? { id: project.customer.id, name: project.customer.name } : null,
+    tags: project.tags.map((tag) => ({ id: tag.id, tag: tag.tag })),
+    _count: {
+      attachments: project._count?.attachments ?? 0,
+      comments: project._count?.comments ?? 0,
+    },
+  }));
 
   const grouped = items.reduce(
     (acc, item) => {
@@ -138,7 +143,7 @@ export async function createProject(
   assertCan(role, "write");
 
   const { customer, tags = [], ...rest } = input;
-  const project = await prisma.$transaction(async (tx: TransactionClient) => {
+  const project = await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
     let customerId = input.customerId;
     if (!customerId && customer) {
       const created = await tx.customer.create({
@@ -193,7 +198,7 @@ export async function updateProject(
   assertCan(role, "write");
   const { tags, customer, ...rest } = input;
 
-  const project = await prisma.$transaction(async (tx: TransactionClient) => {
+  const project = await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
     const current = await tx.project.findUnique({ where: { id }, select: { customerId: true, status: true } });
     if (customer) {
       if (current?.customerId) {
@@ -482,7 +487,12 @@ export async function listCustomers(userId: string): Promise<Customer[]> {
   });
 }
 
-export async function appendActivity(projectId: string, actorId: string, action: string, payload: unknown) {
+export async function appendActivity(
+  projectId: string,
+  actorId: string,
+  action: string,
+  payload: Prisma.InputJsonValue
+) {
   await prisma.activity.create({
     data: {
       projectId,
