@@ -22,7 +22,7 @@ src/app/favicon.ico
 /build
 
 # misc
-.DS_Store
+.DS_Store*
 *.pem
 
 # debug
