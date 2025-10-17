@@ -15,8 +15,7 @@
     "incremental": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
-      "@prisma/client": ["./stubs/prisma-client"]
+      "@/*": ["./src/*"]
     },
     "types": ["vitest/globals", "@testing-library/jest-dom"]
   },
