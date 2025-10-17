@@ -65,6 +65,7 @@ model User {
   ordersCreated    Order[]    @relation("OrderCreatedBy")
   ordersUpdated    Order[]    @relation("OrderUpdatedBy")
   activities       Activity[] @relation("ActivityActor")
+  statusChanges    ProjectStatusHistory[] @relation("ProjectStatusActor")
   customers     Customer[]  @relation("CustomerOwner")
 }
 
@@ -165,7 +166,7 @@ model ProjectStatusHistory {
   changedAt DateTime      @default(now())
   changedBy String
   project   Project       @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  actor     User          @relation(fields: [changedBy], references: [id], onDelete: Cascade)
+  actor     User          @relation("ProjectStatusActor", fields: [changedBy], references: [id], onDelete: Cascade)
 }
 
 model Attachment {
