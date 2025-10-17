@@ -10,6 +10,7 @@ import type { Role } from "@prisma/client";
 export const authConfig = {
   adapter: PrismaAdapter(prisma) as unknown as Adapter,
   session: { strategy: "database" },
+  allowDangerousEmailAccountLinking: true,
   providers: [
     EmailProvider({
       server: process.env.EMAIL_SERVER,
