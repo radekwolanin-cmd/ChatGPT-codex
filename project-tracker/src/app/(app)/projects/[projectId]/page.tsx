@@ -3,16 +3,21 @@ import { getCurrentUser } from "@/lib/auth";
 import { getProject } from "@/server/services/project-service";
 import { ProjectDetail } from "@/components/projects/project-detail";
 
-interface ProjectPageProps {
-  params: { projectId: string };
-}
+type ProjectPageProps = {
+  params?: Promise<{ projectId: string }>;
+};
 
 export default async function ProjectPage({ params }: ProjectPageProps) {
   const user = await getCurrentUser();
   if (!user) {
     notFound();
   }
-  const project = await getProject(user.id, params.projectId);
+  const routeParams = (await params) ?? {};
+  const projectId = routeParams.projectId;
+  if (!projectId) {
+    notFound();
+  }
+  const project = await getProject(user.id, projectId);
   if (!project) {
     notFound();
   }

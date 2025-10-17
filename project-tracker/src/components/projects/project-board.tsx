@@ -122,7 +122,7 @@ function Card({ project, status }: { project: ProjectListEntry; status: ProjectS
       </div>
       <div className="mt-3 flex flex-wrap items-center gap-2 text-xs text-slate-300">
         {project.tags.map((tag) => (
-          <Badge key={tag.tag} variant="outline">
+          <Badge key={tag.id} variant="outline">
             #{tag.tag}
           </Badge>
         ))}
