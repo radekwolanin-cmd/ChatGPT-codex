@@ -72,7 +72,7 @@ async function main() {
     const project = await prisma.project.create({
       data: {
         name: faker.commerce.productName(),
-        description: faker.lorem.paragraph(),
+        description: faker.lorem.sentences({ min: 1, max: 3 }).slice(0, 180),
         status,
         priority,
         deadline,
