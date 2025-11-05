@@ -4,4 +4,4 @@ App should consist of at least 4 subpages:
 - Dashboard that will contain all high level view of all projects with high level financial and profit estimates
 - Projects view that will have toggle button for 2 different kind of views: "List" (tables grouped by status ex: To Do or In Progress) and "Board" (typical Kansan board view with drag and drop). 
 - App Should have an AI chatbot that will know everything about all projects. It should be able ti take actions like sending or replying to an email.
-- Estimates view that will take basic information about customer, pdf or excel files of products from vendor, create a list of all product and comparison between different vendors, ability to apply profit margin and create a estimate for customer in pdf
+- Estimates view that will take basic information about customer, pdf or excel files of products from vendor, create a list of all product and comparison between different vendors, ability to apply profit margin and create a estimate for customer in pdfs
